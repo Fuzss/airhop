@@ -5,14 +5,9 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @SuppressWarnings("unused")
 @Config(modid = AirHop.MODID)
-@Mod.EventBusSubscriber(modid = AirHop.MODID)
 public class ConfigHandler {
 
     @Config.Name("enchantment")
@@ -52,6 +47,20 @@ public class ConfigHandler {
     @Config.Comment("Summon a small particle cloud at every position the player air hops from.")
     public static boolean summonCloud = true;
 
+    @Config.Name("Disable On Hungry")
+    @Config.Comment("Block the air hop enchantment from functioning when the player is too hungry.")
+    public static boolean f1BlockOnHungry = false;
+
+    @Config.Name("Food Threshold")
+    @Config.Comment("Amount of food the player needs to surpass in case \"Disable On Hungry\" is enabled.")
+    @Config.RangeInt(min = 0, max = 20)
+    public static int foodThreshold = 6;
+
+    @Config.Name("Hop Exhaustion")
+    @Config.Comment("Exhaustion multiplier per air hop compared to normal jumps.")
+    @Config.RangeDouble(min = 0)
+    public static double hopExhaustion = 4.0;
+
     public enum EnumArmourType {
 
         ALL(EnumEnchantmentType.ARMOR, null),
@@ -74,13 +83,6 @@ public class ConfigHandler {
 
         public EntityEquipmentSlot getSlot() {
             return equipmentSlot;
-        }
-    }
-
-    @SubscribeEvent
-    public static void configChanged(ConfigChangedEvent.OnConfigChangedEvent evt) {
-        if (evt.getModID().equals(AirHop.MODID)) {
-            ConfigManager.sync(AirHop.MODID, Config.Type.INSTANCE);
         }
     }
 

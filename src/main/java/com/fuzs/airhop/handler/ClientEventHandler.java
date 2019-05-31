@@ -29,7 +29,6 @@ public class ClientEventHandler {
         if(mc.inGameHasFocus && down) {
 
             if (JumpHelper.doJump(player, player.movementInput.sneak)) {
-                JumpHelper.setFallDistance(player);
                 NetworkHandler.sendToServer(new MessageAirJump());
             }
 
