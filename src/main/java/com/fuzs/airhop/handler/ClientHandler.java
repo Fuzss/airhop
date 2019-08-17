@@ -4,7 +4,7 @@ import com.fuzs.airhop.helper.JumpHelper;
 import com.fuzs.airhop.network.NetworkHandler;
 import com.fuzs.airhop.network.messages.AirHopMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -25,7 +25,7 @@ public class ClientHandler {
         // can't use player.movementInput.jump as it triggers too often
         if(mc.gameSettings.keyBindJump.isKeyDown()) {
 
-            ClientPlayerEntity player = mc.player;
+            EntityPlayerSP player = mc.player;
             if (JumpHelper.doJump(player, player.movementInput.sneak)) {
                 NetworkHandler.sendToServer(new AirHopMessage(new AirHopMessage.AirHopMessageData(0)));
             }

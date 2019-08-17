@@ -2,19 +2,18 @@ package com.fuzs.airhop.helper;
 
 import com.fuzs.airhop.capability.AirHopsCapability;
 import com.fuzs.airhop.capability.CapabilityHolder;
-import com.fuzs.airhop.enchantment.AirHopEnchantment;
 import com.fuzs.airhop.handler.ConfigHandler;
 import com.fuzs.airhop.handler.RegistryHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ElytraItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 
 public class JumpHelper {
 
-    public static boolean doJump(PlayerEntity player, boolean sneaking) {
+    public static boolean doJump(EntityPlayer player, boolean sneaking) {
 
         if (!allowJump(player, sneaking)) {
             return false;
@@ -37,7 +36,7 @@ public class JumpHelper {
 
     }
 
-    private static boolean allowJump(PlayerEntity player, boolean sneaking) {
+    private static boolean allowJump(EntityPlayer player, boolean sneaking) {
 
         boolean performingAction = player.onGround || player.isPassenger() || player.abilities.isFlying;
         boolean insideLiquid = player.isInWater() || player.isInLava();
@@ -46,8 +45,8 @@ public class JumpHelper {
             return false;
         }
 
-        ItemStack itemstack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
-        boolean fallFlyingReady = !player.isElytraFlying() && itemstack.getItem() == Items.ELYTRA && ElytraItem.isUsable(itemstack);
+        ItemStack itemstack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+        boolean fallFlyingReady = !player.isElytraFlying() && itemstack.getItem() == Items.ELYTRA && ItemElytra.isUsable(itemstack);
 
         if (ConfigHandler.GENERAL_CONFIG.invertElytra.get()) {
             sneaking = !sneaking;
@@ -62,14 +61,14 @@ public class JumpHelper {
 
     }
 
-    private static int possibleJumps(PlayerEntity player) {
+    private static int possibleJumps(EntityPlayer player) {
 
         return player.inventory.armorInventory.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP.getMaxLevel(),
                 EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, itemStack))).sum();
 
     }
 
-    private static void setFallDistance(PlayerEntity player) {
+    private static void setFallDistance(EntityPlayer player) {
 
         float f = -1.25F;
         player.fallDistance = ConfigHandler.GENERAL_CONFIG.resetFallDistance.get() ? f * player.getCapability(
@@ -78,7 +77,7 @@ public class JumpHelper {
 
     }
 
-    private static void extraExhaustion(PlayerEntity player) {
+    private static void extraExhaustion(EntityPlayer player) {
 
         float f = (float) Math.max(ConfigHandler.GENERAL_CONFIG.hopExhaustion.get() - 1.0, 0);
 

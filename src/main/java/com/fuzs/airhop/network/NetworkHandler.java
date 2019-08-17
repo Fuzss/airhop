@@ -2,7 +2,7 @@ package com.fuzs.airhop.network;
 
 import com.fuzs.airhop.AirHop;
 import com.fuzs.airhop.network.messages.AirHopMessage;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -32,7 +32,7 @@ public class NetworkHandler {
 
     }
 
-    public static void sendTo(Object message, ServerPlayerEntity player) {
+    public static void sendTo(Object message, EntityPlayerMP player) {
 
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
 

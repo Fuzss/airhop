@@ -1,6 +1,6 @@
 package com.fuzs.airhop.capability;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Class modeled after McJty's Modding Tutorials series on YouTube, exact video is https://www.youtube.com/watch?v=3ThGMs5csnQ
@@ -31,11 +31,11 @@ public class AirHopsCapability {
         this.airHops = i;
     }
 
-    public void write(CompoundNBT compound) {
-        compound.putInt(CapabilityHolder.AIR_HOPS_CAP, this.airHops);
+    public void write(NBTTagCompound compound) {
+        compound.setInt(CapabilityHolder.AIR_HOPS_CAP, this.airHops);
     }
 
-    public void read(CompoundNBT compound) {
+    public void read(NBTTagCompound compound) {
         this.airHops = compound.getInt(CapabilityHolder.AIR_HOPS_CAP);
     }
 

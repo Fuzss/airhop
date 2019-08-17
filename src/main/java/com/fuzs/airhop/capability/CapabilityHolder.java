@@ -1,8 +1,8 @@
 package com.fuzs.airhop.capability;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.INBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -26,14 +26,14 @@ public class CapabilityHolder {
         CapabilityManager.INSTANCE.register(AirHopsCapability.class, new Capability.IStorage<AirHopsCapability>() {
 
             @Override
-            public void readNBT(Capability<AirHopsCapability> capability, AirHopsCapability instance, Direction side, INBT nbt) {
-                instance.read((CompoundNBT) nbt);
+            public void readNBT(Capability<AirHopsCapability> capability, AirHopsCapability instance, EnumFacing side, INBTBase nbt) {
+                instance.read((NBTTagCompound) nbt);
             }
 
             @Nonnull
             @Override
-            public INBT writeNBT(Capability<AirHopsCapability> capability, AirHopsCapability instance, Direction facing) {
-                CompoundNBT nbt = new CompoundNBT();
+            public INBTBase writeNBT(Capability<AirHopsCapability> capability, AirHopsCapability instance, EnumFacing side) {
+                NBTTagCompound nbt = new NBTTagCompound();
                 instance.write(nbt);
                 return nbt;
             }
