@@ -12,13 +12,13 @@ import net.minecraft.util.ResourceLocation;
 public class AirHopEnchantment extends Enchantment {
 
     private static final String AIR_HOP_NAME = "air_hop";
-    public static final int AIR_HOP_MAX_LEVEL = 3;
+    private static final int AIR_HOP_MAX_LEVEL = 3;
 
-//    private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[]
-//            {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+    private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[]
+            {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
 
-    public AirHopEnchantment(Rarity rarityIn, EquipmentSlotType... slots) {
-        super(rarityIn, EnchantmentType.ARMOR_LEGS, slots);
+    public AirHopEnchantment(Rarity rarityIn, EnchantmentType type) {
+        super(rarityIn, type, ARMOR_SLOTS);
         this.setRegistryName(new ResourceLocation(AirHop.MODID, AIR_HOP_NAME));
     }
 

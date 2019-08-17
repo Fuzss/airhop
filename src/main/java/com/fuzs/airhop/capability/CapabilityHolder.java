@@ -16,10 +16,10 @@ import javax.annotation.Nonnull;
  */
 public class CapabilityHolder {
 
-    public static final String AIR_HOPS_CAP_NAME = "air_hops";
+    public static final String AIR_HOPS_CAP = "air_hops";
 
     @CapabilityInject(AirHopsCapability.class)
-    public static Capability<AirHopsCapability> AIR_HOPS_CAP;
+    public static Capability<AirHopsCapability> airHopsCap;
 
     public static void register() {
 

@@ -20,12 +20,12 @@ public class JumpHelper {
             return false;
         }
 
-        int jumps = player.getCapability(CapabilityHolder.AIR_HOPS_CAP).map(AirHopsCapability::getAirHops).orElse(AirHopEnchantment.AIR_HOP_MAX_LEVEL);
+        int jumps = player.getCapability(CapabilityHolder.airHopsCap).map(AirHopsCapability::getAirHops).orElse(Integer.MAX_VALUE);
 
         if (jumps < possibleJumps(player)) {
 
             player.jump();
-            player.getCapability(CapabilityHolder.AIR_HOPS_CAP).ifPresent(AirHopsCapability::addAirHop);
+            player.getCapability(CapabilityHolder.airHopsCap).ifPresent(AirHopsCapability::addAirHop);
             setFallDistance(player);
             extraExhaustion(player);
 
@@ -57,41 +57,24 @@ public class JumpHelper {
             return false;
         }
 
-        return player.abilities.allowFlying || !ConfigHandler.GENERAL_CONFIG.disableOnHungry.get() || player.getFoodStats().getFoodLevel() > ConfigHandler.GENERAL_CONFIG.foodThreshold.get();
+        return player.abilities.allowFlying || !ConfigHandler.GENERAL_CONFIG.disableOnHungry.get() || player.getFoodStats()
+                .getFoodLevel() > ConfigHandler.GENERAL_CONFIG.foodThreshold.get();
 
     }
 
     private static int possibleJumps(PlayerEntity player) {
 
-        EquipmentSlotType slot = EquipmentSlotType.LEGS;
-        int level;
-
-        ItemStack stack = player.getItemStackFromSlot(slot);
-        level = EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, stack);
-
-//        if (slot == null) {
-//            level = sumLevels(player.inventory.armorInventory);
-//        } else {
-//            ItemStack stack = player.getItemStackFromSlot(slot);
-//            level = EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, stack);
-//        }
-
-        return level;
+        return player.inventory.armorInventory.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP.getMaxLevel(),
+                EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, itemStack))).sum();
 
     }
-
-//    private static int sumLevels(List<ItemStack> list) {
-//
-//        return list.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP.getMaxLevel(), EnchantmentHelper
-//                .getEnchantmentLevel(RegistryHandler.AIR_HOP, itemStack))).sum();
-//
-//    }
 
     private static void setFallDistance(PlayerEntity player) {
 
         float f = -1.25F;
-        player.fallDistance = ConfigHandler.GENERAL_CONFIG.resetFallDistance.get() ? f * player.getCapability(CapabilityHolder.AIR_HOPS_CAP).map(AirHopsCapability::getAirHops).orElse(AirHopEnchantment.AIR_HOP_MAX_LEVEL)
-                : player.fallDistance + f;
+        player.fallDistance = ConfigHandler.GENERAL_CONFIG.resetFallDistance.get() ? f * player.getCapability(
+                CapabilityHolder.airHopsCap).map(AirHopsCapability::getAirHops).orElse(
+                        Integer.MAX_VALUE) : player.fallDistance + f;
 
     }
 

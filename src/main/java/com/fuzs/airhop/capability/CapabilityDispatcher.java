@@ -22,7 +22,7 @@ public class CapabilityDispatcher implements ICapabilitySerializable<CompoundNBT
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityHolder.AIR_HOPS_CAP) {
+        if (cap == CapabilityHolder.airHopsCap) {
             return this.airHopsOptional.cast();
         }
         return LazyOptional.empty();

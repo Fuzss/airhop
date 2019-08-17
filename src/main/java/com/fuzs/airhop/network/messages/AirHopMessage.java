@@ -75,7 +75,7 @@ public class AirHopMessage {
 
                     if (!player.onGround) {
 
-                        player.getCapability(CapabilityHolder.AIR_HOPS_CAP).ifPresent(it -> it.setAirHops(data.getHops()));
+                        player.getCapability(CapabilityHolder.airHopsCap).ifPresent(it -> it.setAirHops(data.getHops()));
 
                     }
 

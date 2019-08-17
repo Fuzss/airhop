@@ -32,11 +32,11 @@ public class AirHopsCapability {
     }
 
     public void write(CompoundNBT compound) {
-        compound.putInt(CapabilityHolder.AIR_HOPS_CAP_NAME, this.airHops);
+        compound.putInt(CapabilityHolder.AIR_HOPS_CAP, this.airHops);
     }
 
     public void read(CompoundNBT compound) {
-        this.airHops = compound.getInt(CapabilityHolder.AIR_HOPS_CAP_NAME);
+        this.airHops = compound.getInt(CapabilityHolder.AIR_HOPS_CAP);
     }
 
 }

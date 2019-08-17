@@ -24,7 +24,7 @@ public class CommonHandler {
         if (evt.phase == TickEvent.Phase.END) {
 
             if (evt.player.onGround) {
-                evt.player.getCapability(CapabilityHolder.AIR_HOPS_CAP).ifPresent(AirHopsCapability::resetAirHops);
+                evt.player.getCapability(CapabilityHolder.airHopsCap).ifPresent(AirHopsCapability::resetAirHops);
             }
 
         }
@@ -37,7 +37,7 @@ public class CommonHandler {
         if (evt.getEntity() instanceof ServerPlayerEntity) {
 
             ServerPlayerEntity player = (ServerPlayerEntity) evt.getEntity();
-            int i = player.getCapability(CapabilityHolder.AIR_HOPS_CAP).map(AirHopsCapability::getAirHops).orElse(0);
+            int i = player.getCapability(CapabilityHolder.airHopsCap).map(AirHopsCapability::getAirHops).orElse(0);
 
             if (i > 0) {
 
@@ -53,8 +53,8 @@ public class CommonHandler {
     public void onEntityConstructing(AttachCapabilitiesEvent<Entity> evt){
 
         if (evt.getObject() instanceof PlayerEntity) {
-            if (!evt.getObject().getCapability(CapabilityHolder.AIR_HOPS_CAP).isPresent()) {
-                evt.addCapability(new ResourceLocation(AirHop.MODID, CapabilityHolder.AIR_HOPS_CAP_NAME), new CapabilityDispatcher());
+            if (!evt.getObject().getCapability(CapabilityHolder.airHopsCap).isPresent()) {
+                evt.addCapability(new ResourceLocation(AirHop.MODID, CapabilityHolder.AIR_HOPS_CAP), new CapabilityDispatcher());
             }
         }
 
