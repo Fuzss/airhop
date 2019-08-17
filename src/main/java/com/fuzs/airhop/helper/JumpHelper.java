@@ -57,11 +57,7 @@ public class JumpHelper {
             return false;
         }
 
-        if (ConfigHandler.f1BlockOnHungry && (player.getFoodStats().getFoodLevel() <= ConfigHandler.foodThreshold || !player.capabilities.allowFlying)) {
-            return false;
-        }
-
-        return true;
+        return player.capabilities.allowFlying || !ConfigHandler.f1BlockOnHungry || player.getFoodStats().getFoodLevel() > ConfigHandler.foodThreshold;
 
     }
 
