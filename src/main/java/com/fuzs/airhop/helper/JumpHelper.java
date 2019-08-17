@@ -1,31 +1,31 @@
 package com.fuzs.airhop.helper;
 
-import com.fuzs.airhop.capability.PlayerProperties;
+import com.fuzs.airhop.capability.AirHopsCapability;
+import com.fuzs.airhop.capability.CapabilityHolder;
+import com.fuzs.airhop.enchantment.AirHopEnchantment;
 import com.fuzs.airhop.handler.ConfigHandler;
-import com.fuzs.airhop.handler.RegistryEventHandler;
+import com.fuzs.airhop.handler.RegistryHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemElytra;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
+import net.minecraft.item.Items;
 
 public class JumpHelper {
 
-    public static boolean doJump(EntityPlayer player, boolean sneaking) {
+    public static boolean doJump(PlayerEntity player, boolean sneaking) {
 
         if (!allowJump(player, sneaking)) {
             return false;
         }
 
-        int jumps = PlayerProperties.getPlayerAirJumps(player).getAirJumps();
+        int jumps = player.getCapability(CapabilityHolder.AIR_HOPS_CAP).map(AirHopsCapability::getAirHops).orElse(AirHopEnchantment.AIR_HOP_MAX_LEVEL);
 
-        if (jumps < JumpHelper.possibleJumps(player)) {
+        if (jumps < possibleJumps(player)) {
 
             player.jump();
-            PlayerProperties.getPlayerAirJumps(player).addAirJump();
+            player.getCapability(CapabilityHolder.AIR_HOPS_CAP).ifPresent(AirHopsCapability::addAirHop);
             setFallDistance(player);
             extraExhaustion(player);
 
@@ -37,19 +37,19 @@ public class JumpHelper {
 
     }
 
-    private static boolean allowJump(EntityPlayer player, boolean sneaking) {
+    private static boolean allowJump(PlayerEntity player, boolean sneaking) {
 
-        boolean performingAction = player.onGround || player.isRiding() || player.capabilities.isFlying;
+        boolean performingAction = player.onGround || player.isPassenger() || player.abilities.isFlying;
         boolean insideLiquid = player.isInWater() || player.isInLava();
 
         if (performingAction || insideLiquid) {
             return false;
         }
 
-        ItemStack itemstack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        boolean fallFlyingReady = !player.isElytraFlying() && itemstack.getItem() == Items.ELYTRA && ItemElytra.isUsable(itemstack);
+        ItemStack itemstack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+        boolean fallFlyingReady = !player.isElytraFlying() && itemstack.getItem() == Items.ELYTRA && ElytraItem.isUsable(itemstack);
 
-        if (ConfigHandler.invertElytra) {
+        if (ConfigHandler.GENERAL_CONFIG.invertElytra.get()) {
             sneaking = !sneaking;
         }
 
@@ -57,55 +57,51 @@ public class JumpHelper {
             return false;
         }
 
-        if (ConfigHandler.f1BlockOnHungry && (player.getFoodStats().getFoodLevel() <= ConfigHandler.foodThreshold || !player.capabilities.allowFlying)) {
-            return false;
-        }
-
-        return true;
+        return player.abilities.allowFlying || !ConfigHandler.GENERAL_CONFIG.disableOnHungry.get() || player.getFoodStats().getFoodLevel() > ConfigHandler.GENERAL_CONFIG.foodThreshold.get();
 
     }
 
-    private static int possibleJumps(EntityPlayer player) {
+    private static int possibleJumps(PlayerEntity player) {
 
-        EntityEquipmentSlot slot = ConfigHandler.enchantmentConfig.type.getSlot();
+        EquipmentSlotType slot = EquipmentSlotType.LEGS;
         int level;
 
-        if (slot == null) {
-            level = sumLevels(player.inventory.armorInventory);
-        } else {
-            ItemStack stack = player.getItemStackFromSlot(slot);
-            level = EnchantmentHelper.getEnchantmentLevel(RegistryEventHandler.AIR_HOP, stack);
-        }
+        ItemStack stack = player.getItemStackFromSlot(slot);
+        level = EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, stack);
+
+//        if (slot == null) {
+//            level = sumLevels(player.inventory.armorInventory);
+//        } else {
+//            ItemStack stack = player.getItemStackFromSlot(slot);
+//            level = EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, stack);
+//        }
 
         return level;
 
     }
 
-    private static int sumLevels(List<ItemStack> list) {
+//    private static int sumLevels(List<ItemStack> list) {
+//
+//        return list.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP.getMaxLevel(), EnchantmentHelper
+//                .getEnchantmentLevel(RegistryHandler.AIR_HOP, itemStack))).sum();
+//
+//    }
 
-        return list.stream().mapToInt(itemStack -> Math.min(ConfigHandler.enchantmentConfig.maxLevel, EnchantmentHelper
-                .getEnchantmentLevel(RegistryEventHandler.AIR_HOP, itemStack))).sum();
-
-    }
-
-    private static void setFallDistance(EntityPlayer player) {
+    private static void setFallDistance(PlayerEntity player) {
 
         float f = -1.25F;
-        player.fallDistance = ConfigHandler.resetFallDistance ? f * PlayerProperties.getPlayerAirJumps(player).getAirJumps()
+        player.fallDistance = ConfigHandler.GENERAL_CONFIG.resetFallDistance.get() ? f * player.getCapability(CapabilityHolder.AIR_HOPS_CAP).map(AirHopsCapability::getAirHops).orElse(AirHopEnchantment.AIR_HOP_MAX_LEVEL)
                 : player.fallDistance + f;
 
     }
 
-    private static void extraExhaustion(EntityPlayer player) {
+    private static void extraExhaustion(PlayerEntity player) {
 
-        float f = (float) Math.max(ConfigHandler.hopExhaustion - 1.0, 0);
+        float f = (float) Math.max(ConfigHandler.GENERAL_CONFIG.hopExhaustion.get() - 1.0, 0);
 
-        if (player.isSprinting())
-        {
+        if (player.isSprinting()) {
             player.addExhaustion(0.2F * f);
-        }
-        else
-        {
+        } else {
             player.addExhaustion(0.05F * f);
         }
 

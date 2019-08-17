@@ -1,89 +1,62 @@
 package com.fuzs.airhop.handler;
 
-import com.fuzs.airhop.AirHop;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-@SuppressWarnings("unused")
-@Config(modid = AirHop.MODID)
 public class ConfigHandler {
 
-    @Config.Name("enchantment")
-    @Config.RequiresMcRestart
-    public static EnchantmentConfig enchantmentConfig = new EnchantmentConfig();
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    public static class EnchantmentConfig {
+    public static final GeneralConfig GENERAL_CONFIG = new GeneralConfig("general");
+//    public static final EnchantmentConfig ENCHANTMENT_CONFIG = new EnchantmentConfig("enchantment");
 
-        @Config.Name("Enchantment Rarity")
-        @Config.Comment("Rarity of this enchantment.")
-        public Enchantment.Rarity rarity = Enchantment.Rarity.RARE;
+    public static class GeneralConfig {
 
-        @Config.Name("Enchantment Type")
-        @Config.Comment("Defines the piece of armour this enchantment can be applied to. If \"ALL\" is used, the levels on all armour pieces will be combined.")
-        public EnumArmourType type = EnumArmourType.LEGGINGS;
+        public final ForgeConfigSpec.BooleanValue resetFallDistance;
+        public final ForgeConfigSpec.BooleanValue invertElytra;
+        public final ForgeConfigSpec.BooleanValue summonCloud;
+        public final ForgeConfigSpec.BooleanValue disableOnHungry;
+        public final ForgeConfigSpec.IntValue foodThreshold;
+        public final ForgeConfigSpec.DoubleValue hopExhaustion;
 
-        @Config.Name("Maximum Level")
-        @Config.Comment("Maximum level for this enchantment. Each level provides one additional air hop.")
-        @Config.RangeInt(min = 0)
-        public int maxLevel = 3;
+        private GeneralConfig(String name) {
 
-        @Config.Name("Treasure Enchantment")
-        @Config.Comment("Makes the enchantment unobtainable from enchanting tables. It is only available on items from loot chests, fishing and villager trading.")
-        public boolean treasureEnchantment = true;
+            BUILDER.push(name);
+
+            this.resetFallDistance = BUILDER.comment("Reset the fall distance on every air hop. Otherwise each air hop only decreases it by the default jump height.").define("Reset Fall Distance", false);
+            this.invertElytra = BUILDER.comment("When wearing an elytra; don't use it when there are air hops left. Sneaking inverts this behaviour in-game.").define("Prioritise Over Elytra", false);
+            this.summonCloud = BUILDER.comment("Summon a small particle cloud at every position the player air hops from.").define("Summon Cloud Puff", true);
+            this.disableOnHungry = BUILDER.comment("Block the air hop enchantment from functioning when the player is too hungry.").define("Disable On Hungry", false);
+            this.foodThreshold = BUILDER.comment("Amount of food the player needs to surpass in case \"Disable On Hungry\" is enabled.").defineInRange("Food Threshold", 6, 0, 20);
+            this.hopExhaustion = BUILDER.comment("Exhaustion multiplier per air hop compared to normal jumps.").defineInRange("Hop Exhaustion", 4.0, 0.0, Double.MAX_VALUE);
+
+            BUILDER.pop();
+
+        }
 
     }
 
-    @Config.Name("Reset Fall Distance")
-    @Config.Comment("Reset the fall distance on every air hop. Otherwise each air hop only decreases it by the default jump height.")
-    public static boolean resetFallDistance = false;
+//    public static class EnchantmentConfig {
+//
+//        public final ForgeConfigSpec.EnumValue<Enchantment.Rarity> rarity;
+//        public final ForgeConfigSpec.EnumValue<ArmorType> type;
+//        public final ForgeConfigSpec.IntValue maxLevel;
+//        public final ForgeConfigSpec.BooleanValue treasureEnchantment;
+//
+//        private EnchantmentConfig(String name) {
+//
+//            BUILDER.push(name);
+//
+//            this.rarity = BUILDER.comment(ConfigHelper.getEnumDescription("Rarity of this enchantment.", Enchantment.Rarity.values())).defineEnum("Enchantment Rarity", Enchantment.Rarity.RARE);
+//            this.type = BUILDER.comment(ConfigHelper.getEnumDescription("Defines the piece of armor this enchantment can be applied to. If \"ALL\" is used, the levels on all armor pieces will be combined.", ArmorType.values())).defineEnum("Enchantment Type", ArmorType.LEGGINGS);
+//            this.maxLevel = BUILDER.comment("Maximum level for this enchantment. Each level provides one additional air hop.").defineInRange("Maximum Level", 3, 0, Integer.MAX_VALUE);
+//            this.treasureEnchantment = BUILDER.comment("Makes the enchantment unobtainable from enchanting tables. It is only available on items from loot chests, fishing and villager trading.").define("Treasure Enchantment", true);
+//
+//            BUILDER.pop();
+//
+//        }
+//
+//    }
 
-    @Config.Name("Prioritise Over Elytra")
-    @Config.Comment("When wearing an elytra; don't use it when there are air hops left. Sneaking inverts this behaviour in-game.")
-    public static boolean invertElytra = false;
-
-    @Config.Name("Summon Cloud Puff")
-    @Config.Comment("Summon a small particle cloud at every position the player air hops from.")
-    public static boolean summonCloud = true;
-
-    @Config.Name("Disable On Hungry")
-    @Config.Comment("Block the air hop enchantment from functioning when the player is too hungry.")
-    public static boolean f1BlockOnHungry = false;
-
-    @Config.Name("Food Threshold")
-    @Config.Comment("Amount of food the player needs to surpass in case \"Disable On Hungry\" is enabled.")
-    @Config.RangeInt(min = 0, max = 20)
-    public static int foodThreshold = 6;
-
-    @Config.Name("Hop Exhaustion")
-    @Config.Comment("Exhaustion multiplier per air hop compared to normal jumps.")
-    @Config.RangeDouble(min = 0)
-    public static double hopExhaustion = 4.0;
-
-    public enum EnumArmourType {
-
-        ALL(EnumEnchantmentType.ARMOR, null),
-        HELMET(EnumEnchantmentType.ARMOR_HEAD, EntityEquipmentSlot.HEAD),
-        CHESTPLATE(EnumEnchantmentType.ARMOR_CHEST, EntityEquipmentSlot.CHEST),
-        LEGGINGS(EnumEnchantmentType.ARMOR_LEGS, EntityEquipmentSlot.LEGS),
-        BOOTS(EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
-
-        private EnumEnchantmentType enchantmentType;
-        private EntityEquipmentSlot equipmentSlot;
-
-        EnumArmourType(EnumEnchantmentType type, EntityEquipmentSlot slot) {
-            this.enchantmentType = type;
-            this.equipmentSlot = slot;
-        }
-
-        public EnumEnchantmentType getType() {
-            return this.enchantmentType;
-        }
-
-        public EntityEquipmentSlot getSlot() {
-            return equipmentSlot;
-        }
-    }
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
 }

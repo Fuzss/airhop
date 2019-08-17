@@ -1,22 +1,25 @@
 package com.fuzs.airhop.enchantment;
 
 import com.fuzs.airhop.AirHop;
-import com.fuzs.airhop.handler.ConfigHandler;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * Values are based on the frost walker enchantment
  */
-public class EnchantmentAirHop extends Enchantment {
+public class AirHopEnchantment extends Enchantment {
 
-    private static final String AIR_HOP = "air_hop";
+    private static final String AIR_HOP_NAME = "air_hop";
+    public static final int AIR_HOP_MAX_LEVEL = 3;
 
-    public EnchantmentAirHop(Rarity rarityIn, ConfigHandler.EnumArmourType type, EntityEquipmentSlot... slots) {
-        super(rarityIn, type.getType(), slots);
-        this.setRegistryName(new ResourceLocation(AirHop.MODID, AIR_HOP));
-        this.setName(AIR_HOP);
+//    private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[]
+//            {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+
+    public AirHopEnchantment(Rarity rarityIn, EquipmentSlotType... slots) {
+        super(rarityIn, EnchantmentType.ARMOR_LEGS, slots);
+        this.setRegistryName(new ResourceLocation(AirHop.MODID, AIR_HOP_NAME));
     }
 
     /**
@@ -42,12 +45,12 @@ public class EnchantmentAirHop extends Enchantment {
      */
     @Override
     public int getMaxLevel() {
-        return ConfigHandler.enchantmentConfig.maxLevel;
+        return AIR_HOP_MAX_LEVEL;
     }
 
     @Override
     public boolean isTreasureEnchantment() {
-        return ConfigHandler.enchantmentConfig.treasureEnchantment;
+        return true;
     }
 
 }
