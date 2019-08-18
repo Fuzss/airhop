@@ -63,8 +63,8 @@ public class JumpHelper {
 
     private static int possibleJumps(EntityPlayer player) {
 
-        return player.inventory.armorInventory.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP.getMaxLevel(),
-                EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, itemStack))).sum();
+        return player.inventory.armorInventory.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP_ENCH.getMaxLevel(),
+                EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP_ENCH, itemStack))).sum();
 
     }
 
