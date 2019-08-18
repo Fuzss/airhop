@@ -2,7 +2,6 @@ package com.fuzs.airhop.helper;
 
 import com.fuzs.airhop.capability.AirHopsCapability;
 import com.fuzs.airhop.capability.CapabilityHolder;
-import com.fuzs.airhop.enchantment.AirHopEnchantment;
 import com.fuzs.airhop.handler.ConfigHandler;
 import com.fuzs.airhop.handler.RegistryHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -64,8 +63,8 @@ public class JumpHelper {
 
     private static int possibleJumps(PlayerEntity player) {
 
-        return player.inventory.armorInventory.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP.getMaxLevel(),
-                EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP, itemStack))).sum();
+        return player.inventory.armorInventory.stream().mapToInt(itemStack -> Math.min(RegistryHandler.AIR_HOP_ENCH.getMaxLevel(),
+                EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP_ENCH, itemStack))).sum();
 
     }
 

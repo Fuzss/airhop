@@ -15,9 +15,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@SuppressWarnings("unused")
 public class CommonHandler {
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent evt) {
 
@@ -31,6 +31,7 @@ public class CommonHandler {
 
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent evt) {
 
@@ -49,6 +50,7 @@ public class CommonHandler {
 
     }
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onEntityConstructing(AttachCapabilitiesEvent<Entity> evt){
 
