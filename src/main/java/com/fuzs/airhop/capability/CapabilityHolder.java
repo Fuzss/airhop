@@ -8,13 +8,16 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
  * Class modeled after McJty's Modding Tutorials series on YouTube, exact video is https://www.youtube.com/watch?v=3ThGMs5csnQ
  * Original source is available from https://github.com/McJty/YouTubeModdingTutorial/blob/master/src/main/java/mcjty/mymod/playermana/PlayerProperties.java
  */
-public class PlayerProperties {
+public class CapabilityHolder {
 
-    @CapabilityInject(PlayerAirJumps.class)
-    public static Capability<PlayerAirJumps> PLAYER_AIRJUMPS;
+    @SuppressWarnings("WeakerAccess")
+    public static final String AIR_HOPS_CAP = "air_hops";
 
-    public static PlayerAirJumps getPlayerAirJumps(EntityPlayer player) {
-        return player.getCapability(PLAYER_AIRJUMPS, null);
+    @CapabilityInject(AirHopsCapability.class)
+    public static Capability<AirHopsCapability> airHopsCap;
+
+    public static AirHopsCapability getAirHopsCap(EntityPlayer player) {
+        return player.getCapability(airHopsCap, null);
     }
 
 }

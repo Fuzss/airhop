@@ -1,8 +1,8 @@
 package com.fuzs.airhop.helper;
 
-import com.fuzs.airhop.capability.PlayerProperties;
+import com.fuzs.airhop.capability.CapabilityHolder;
 import com.fuzs.airhop.handler.ConfigHandler;
-import com.fuzs.airhop.handler.RegistryEventHandler;
+import com.fuzs.airhop.handler.RegistryHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -20,12 +20,12 @@ public class JumpHelper {
             return false;
         }
 
-        int jumps = PlayerProperties.getPlayerAirJumps(player).getAirJumps();
+        int jumps = CapabilityHolder.getAirHopsCap(player).getAirHops();
 
         if (jumps < JumpHelper.possibleJumps(player)) {
 
             player.jump();
-            PlayerProperties.getPlayerAirJumps(player).addAirJump();
+            CapabilityHolder.getAirHopsCap(player).addAirHop();
             setFallDistance(player);
             extraExhaustion(player);
 
@@ -70,7 +70,7 @@ public class JumpHelper {
             level = sumLevels(player.inventory.armorInventory);
         } else {
             ItemStack stack = player.getItemStackFromSlot(slot);
-            level = EnchantmentHelper.getEnchantmentLevel(RegistryEventHandler.AIR_HOP, stack);
+            level = EnchantmentHelper.getEnchantmentLevel(RegistryHandler.AIR_HOP_ENCH, stack);
         }
 
         return level;
@@ -80,14 +80,14 @@ public class JumpHelper {
     private static int sumLevels(List<ItemStack> list) {
 
         return list.stream().mapToInt(itemStack -> Math.min(ConfigHandler.enchantmentConfig.maxLevel, EnchantmentHelper
-                .getEnchantmentLevel(RegistryEventHandler.AIR_HOP, itemStack))).sum();
+                .getEnchantmentLevel(RegistryHandler.AIR_HOP_ENCH, itemStack))).sum();
 
     }
 
     private static void setFallDistance(EntityPlayer player) {
 
         float f = -1.25F;
-        player.fallDistance = ConfigHandler.resetFallDistance ? f * PlayerProperties.getPlayerAirJumps(player).getAirJumps()
+        player.fallDistance = ConfigHandler.resetFallDistance ? f * CapabilityHolder.getAirHopsCap(player).getAirHops()
                 : player.fallDistance + f;
 
     }

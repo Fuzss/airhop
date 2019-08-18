@@ -34,13 +34,14 @@ public class AirHop {
     public static CommonProxy proxy;
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+    public void onPreInit(FMLPreInitializationEvent evt) {
         proxy.preInit();
         NetworkHandler.init();
     }
 
     @EventHandler
-    public void fingerprintViolation(FMLFingerprintViolationEvent event) {
-        LOGGER.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
+    public void onFingerprintViolation(FMLFingerprintViolationEvent evt) {
+        LOGGER.warn("Invalid fingerprint detected! The file " + evt.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
+
 }

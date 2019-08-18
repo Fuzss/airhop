@@ -1,12 +1,11 @@
 package com.fuzs.airhop.handler;
 
 import com.fuzs.airhop.AirHop;
+import com.fuzs.airhop.util.EnumArmorType;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.common.config.Config;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Config(modid = AirHop.MODID)
 public class ConfigHandler {
 
@@ -21,8 +20,8 @@ public class ConfigHandler {
         public Enchantment.Rarity rarity = Enchantment.Rarity.RARE;
 
         @Config.Name("Enchantment Type")
-        @Config.Comment("Defines the piece of armour this enchantment can be applied to. If \"ALL\" is used, the levels on all armour pieces will be combined.")
-        public EnumArmourType type = EnumArmourType.LEGGINGS;
+        @Config.Comment("Defines the piece of armor this enchantment can be applied to. If \"ALL\" is used, the levels on all armor pieces will be combined.")
+        public EnumArmorType type = EnumArmorType.ALL;
 
         @Config.Name("Maximum Level")
         @Config.Comment("Maximum level for this enchantment. Each level provides one additional air hop.")
@@ -60,30 +59,5 @@ public class ConfigHandler {
     @Config.Comment("Exhaustion multiplier per air hop compared to normal jumps.")
     @Config.RangeDouble(min = 0)
     public static double hopExhaustion = 4.0;
-
-    public enum EnumArmourType {
-
-        ALL(EnumEnchantmentType.ARMOR, null),
-        HELMET(EnumEnchantmentType.ARMOR_HEAD, EntityEquipmentSlot.HEAD),
-        CHESTPLATE(EnumEnchantmentType.ARMOR_CHEST, EntityEquipmentSlot.CHEST),
-        LEGGINGS(EnumEnchantmentType.ARMOR_LEGS, EntityEquipmentSlot.LEGS),
-        BOOTS(EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
-
-        private EnumEnchantmentType enchantmentType;
-        private EntityEquipmentSlot equipmentSlot;
-
-        EnumArmourType(EnumEnchantmentType type, EntityEquipmentSlot slot) {
-            this.enchantmentType = type;
-            this.equipmentSlot = slot;
-        }
-
-        public EnumEnchantmentType getType() {
-            return this.enchantmentType;
-        }
-
-        public EntityEquipmentSlot getSlot() {
-            return equipmentSlot;
-        }
-    }
 
 }

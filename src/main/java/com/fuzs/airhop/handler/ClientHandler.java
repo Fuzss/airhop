@@ -2,7 +2,7 @@ package com.fuzs.airhop.handler;
 
 import com.fuzs.airhop.helper.JumpHelper;
 import com.fuzs.airhop.network.NetworkHandler;
-import com.fuzs.airhop.network.messages.MessageAirJump;
+import com.fuzs.airhop.network.messages.MessageDoAirJump;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
 @SuppressWarnings("unused")
-public class ClientEventHandler {
+public class ClientHandler {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent evt) {
@@ -29,7 +29,7 @@ public class ClientEventHandler {
         if(mc.inGameHasFocus && down) {
 
             if (JumpHelper.doJump(player, player.movementInput.sneak)) {
-                NetworkHandler.sendToServer(new MessageAirJump());
+                NetworkHandler.sendToServer(new MessageDoAirJump());
             }
 
 

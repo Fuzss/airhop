@@ -2,6 +2,7 @@ package com.fuzs.airhop.enchantment;
 
 import com.fuzs.airhop.AirHop;
 import com.fuzs.airhop.handler.ConfigHandler;
+import com.fuzs.airhop.util.EnumArmorType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
@@ -13,7 +14,7 @@ public class EnchantmentAirHop extends Enchantment {
 
     private static final String AIR_HOP = "air_hop";
 
-    public EnchantmentAirHop(Rarity rarityIn, ConfigHandler.EnumArmourType type, EntityEquipmentSlot... slots) {
+    public EnchantmentAirHop(Rarity rarityIn, EnumArmorType type, EntityEquipmentSlot... slots) {
         super(rarityIn, type.getType(), slots);
         this.setRegistryName(new ResourceLocation(AirHop.MODID, AIR_HOP));
         this.setName(AIR_HOP);

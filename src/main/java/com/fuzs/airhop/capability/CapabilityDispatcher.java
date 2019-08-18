@@ -11,19 +11,20 @@ import javax.annotation.Nonnull;
  * Class modeled after McJty's Modding Tutorials series on YouTube, exact video is https://www.youtube.com/watch?v=3ThGMs5csnQ
  * Original source is available from https://github.com/McJty/YouTubeModdingTutorial/blob/master/src/main/java/mcjty/mymod/playermana/PropertiesDispatcher.java
  */
-public class PropertiesDispatcher implements ICapabilitySerializable<NBTTagCompound> {
+public class CapabilityDispatcher implements ICapabilitySerializable<NBTTagCompound> {
 
-    private PlayerAirJumps playerAirJumps = new PlayerAirJumps();
+    private AirHopsCapability airHops = new AirHopsCapability();
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return capability == PlayerProperties.PLAYER_AIRJUMPS;
+        return capability == CapabilityHolder.airHopsCap;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
-        if (capability == PlayerProperties.PLAYER_AIRJUMPS) {
-            return (T) playerAirJumps;
+        if (capability == CapabilityHolder.airHopsCap) {
+            return (T) this.airHops;
         }
         return null;
     }
@@ -31,12 +32,13 @@ public class PropertiesDispatcher implements ICapabilitySerializable<NBTTagCompo
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
-        playerAirJumps.saveNBTData(nbt);
+        this.airHops.saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        playerAirJumps.loadNBTData(nbt);
+        this.airHops.loadNBTData(nbt);
     }
+
 }

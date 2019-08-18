@@ -1,7 +1,8 @@
 package com.fuzs.airhop.network;
 
 import com.fuzs.airhop.AirHop;
-import com.fuzs.airhop.network.messages.MessageAirJump;
+import com.fuzs.airhop.network.messages.MessageDoAirJump;
+import com.fuzs.airhop.network.messages.MessageSyncAirJump;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,7 +17,8 @@ public class NetworkHandler {
 
     public static void init(){
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(AirHop.MODID);
-        INSTANCE.registerMessage(MessageAirJump.class, MessageAirJump.class, nextDiscriminator(), Side.SERVER);
+        INSTANCE.registerMessage(MessageDoAirJump.class, MessageDoAirJump.class, nextDiscriminator(), Side.SERVER);
+        INSTANCE.registerMessage(MessageSyncAirJump.class, MessageSyncAirJump.class, nextDiscriminator(), Side.CLIENT);
     }
 
     public static void sendToServer(IMessage message){

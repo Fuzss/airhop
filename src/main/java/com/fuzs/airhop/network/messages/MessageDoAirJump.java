@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.WorldServer;
 
-public class MessageAirJump extends MessageBase<MessageAirJump> {
+public class MessageDoAirJump extends MessageBase<MessageDoAirJump> {
 
     @Override
     public void fromBytes(ByteBuf buf) {
@@ -19,11 +19,11 @@ public class MessageAirJump extends MessageBase<MessageAirJump> {
     }
 
     @Override
-    public void handleClientSide(MessageAirJump message, EntityPlayer player) {
+    public void handleClientSide(MessageDoAirJump message, EntityPlayer player) {
     }
 
     @Override
-    public void handleServerSide(MessageAirJump message, EntityPlayer player) {
+    public void handleServerSide(MessageDoAirJump message, EntityPlayer player) {
 
         WorldServer world = ((EntityPlayerMP) player).getServerWorld();
         world.addScheduledTask(() -> {
