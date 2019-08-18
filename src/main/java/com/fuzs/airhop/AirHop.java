@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Mod(
         modid = AirHop.MODID,
         name = AirHop.NAME,
@@ -17,8 +18,8 @@ import org.apache.logging.log4j.Logger;
         acceptedMinecraftVersions = AirHop.RANGE,
         certificateFingerprint = AirHop.FINGERPRINT
 )
-public class AirHop
-{
+public class AirHop {
+
     public static final String MODID = "airhop";
     public static final String NAME = "Air Hop";
     public static final String VERSION = "@VERSION@";

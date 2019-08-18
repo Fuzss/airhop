@@ -34,7 +34,7 @@ public class RegistryEventHandler {
     public static void onEntityConstructing(AttachCapabilitiesEvent<Entity> event){
         if (event.getObject() instanceof EntityPlayer) {
             if (!event.getObject().hasCapability(PlayerProperties.PLAYER_AIRJUMPS, null)) {
-                event.addCapability(new ResourceLocation(AirHop.MODID, "AirJumps"), new PropertiesDispatcher());
+                event.addCapability(new ResourceLocation(AirHop.MODID, "air_hops"), new PropertiesDispatcher());
             }
         }
     }

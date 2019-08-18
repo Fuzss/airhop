@@ -4,9 +4,9 @@ import com.fuzs.airhop.capability.PlayerProperties;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-@SuppressWarnings("unused")
 public class CommonEventHandler {
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void playerTick(TickEvent.PlayerTickEvent evt) {
 

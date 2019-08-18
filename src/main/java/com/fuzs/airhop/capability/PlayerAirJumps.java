@@ -25,16 +25,16 @@ public class PlayerAirJumps {
         this.airJumps++;
     }
 
-    public void copyFrom(PlayerAirJumps source) {
-        this.airJumps = source.airJumps;
+    public void setAirJumps(int i) {
+        this.airJumps = i;
     }
 
     void saveNBTData(NBTTagCompound compound) {
-        compound.setInteger("AirJumps", this.airJumps);
+        compound.setInteger("air_hops", this.airJumps);
     }
 
     void loadNBTData(NBTTagCompound compound) {
-        this.airJumps = compound.getInteger("AirJumps");
+        this.airJumps = compound.getInteger("air_hops");
     }
 
 }

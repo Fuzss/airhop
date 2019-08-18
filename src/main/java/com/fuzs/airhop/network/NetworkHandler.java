@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
+@SuppressWarnings("unused")
 public class NetworkHandler {
 
     private static SimpleNetworkWrapper INSTANCE;
