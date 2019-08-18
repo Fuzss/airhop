@@ -47,7 +47,7 @@ public class JumpHelper {
         }
 
         ItemStack itemstack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        boolean fallFlyingReady = !player.isElytraFlying() && itemstack.getItem() == Items.ELYTRA && ItemElytra.isUsable(itemstack);
+        boolean fallFlyingReady = !player.isElytraFlying() && itemstack.getItem() == Items.ELYTRA && ItemElytra.isBroken(itemstack);
 
         if (ConfigHandler.invertElytra) {
             sneaking = !sneaking;

@@ -23,7 +23,7 @@ public class AirHop {
     public static final String MODID = "airhop";
     public static final String NAME = "Air Hop";
     public static final String VERSION = "@VERSION@";
-    public static final String RANGE = "[1.12, 1.12.2]";
+    public static final String RANGE = "[1.11, 1.11.2]";
     public static final String CLIENT_PROXY_CLASS = "com.fuzs.airhop.proxy.ClientProxy";
     public static final String SERVER_PROXY_CLASS = "com.fuzs.airhop.proxy.ServerProxy";
     public static final String FINGERPRINT = "@FINGERPRINT@";
