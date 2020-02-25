@@ -64,7 +64,7 @@ public class AirHopMessage {
                     if (player != null && new PerformJumpHelper().doJump(player, !ConfigBuildHandler.GENERAL_CONFIG.invertElytra.get())) {
 
                         if (ConfigBuildHandler.GENERAL_CONFIG.summonCloud.get()) {
-                            player.getServerWorld().spawnParticle(ParticleTypes.CLOUD, player.posX, player.posY, player.posZ, 15, 0.25F, 0.0F, 0.25F, 0.01F);
+                            player.getServerWorld().spawnParticle(ParticleTypes.CLOUD, player.func_226277_ct_(), player.func_226278_cu_(), player.func_226281_cx_(), 15, 0.25F, 0.0F, 0.25F, 0.01F);
                         }
 
                     }
@@ -72,11 +72,8 @@ public class AirHopMessage {
                 } else {
 
                     ClientPlayerEntity player = Minecraft.getInstance().player;
-
-                    if (!player.onGround) {
-
+                    if (player != null && !player.onGround) {
                         player.getCapability(CapabilityHolder.airHopsCap).ifPresent(it -> it.setAirHops(data.getHops()));
-
                     }
 
                 }

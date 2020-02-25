@@ -12,23 +12,22 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
 public class InitiateJumpHandler {
 
+    private final Minecraft mc = Minecraft.getInstance();
     private final PerformJumpHelper jumpHelper = new PerformJumpHelper();
 
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent evt) {
 
-        Minecraft mc = Minecraft.getInstance();
-
-        if (!mc.isGameFocused() || evt.getAction() != GLFW_PRESS) {
+        if (!this.mc.isGameFocused() || evt.getAction() != GLFW_PRESS) {
             return;
         }
 
         // can't use player.movementInput.jump as it triggers too often
-        if(mc.gameSettings.keyBindJump.isKeyDown()) {
+        if(this.mc.gameSettings.keyBindJump.isKeyDown()) {
 
-            ClientPlayerEntity player = mc.player;
-            if (this.jumpHelper.doJump(player, player.movementInput.sneak)) {
+            ClientPlayerEntity player = this.mc.player;
+            if (player != null && this.jumpHelper.doJump(player, player.movementInput.field_228350_h_)) {
                 NetworkHandler.sendToServer(new AirHopMessage(new AirHopMessage.AirHopMessageData(0)));
             }
 
