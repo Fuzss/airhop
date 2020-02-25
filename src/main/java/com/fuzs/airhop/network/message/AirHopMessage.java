@@ -1,8 +1,8 @@
-package com.fuzs.airhop.network.messages;
+package com.fuzs.airhop.network.message;
 
 import com.fuzs.airhop.capability.CapabilityHolder;
-import com.fuzs.airhop.handler.ConfigHandler;
-import com.fuzs.airhop.helper.JumpHelper;
+import com.fuzs.airhop.config.ConfigBuildHandler;
+import com.fuzs.airhop.common.helper.PerformJumpHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -61,9 +61,9 @@ public class AirHopMessage {
 
                     ServerPlayerEntity player = ctx.get().getSender();
 
-                    if (player != null && JumpHelper.doJump(player, !ConfigHandler.GENERAL_CONFIG.invertElytra.get())) {
+                    if (player != null && new PerformJumpHelper().doJump(player, !ConfigBuildHandler.GENERAL_CONFIG.invertElytra.get())) {
 
-                        if (ConfigHandler.GENERAL_CONFIG.summonCloud.get()) {
+                        if (ConfigBuildHandler.GENERAL_CONFIG.summonCloud.get()) {
                             player.getServerWorld().spawnParticle(ParticleTypes.CLOUD, player.posX, player.posY, player.posZ, 15, 0.25F, 0.0F, 0.25F, 0.01F);
                         }
 

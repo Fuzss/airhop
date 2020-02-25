@@ -1,11 +1,11 @@
-package com.fuzs.airhop.handler;
+package com.fuzs.airhop.common;
 
 import com.fuzs.airhop.AirHop;
 import com.fuzs.airhop.capability.AirHopsCapability;
 import com.fuzs.airhop.capability.CapabilityHolder;
 import com.fuzs.airhop.capability.CapabilityDispatcher;
 import com.fuzs.airhop.network.NetworkHandler;
-import com.fuzs.airhop.network.messages.AirHopMessage;
+import com.fuzs.airhop.network.message.AirHopMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -15,11 +15,11 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class CommonHandler {
+public class SyncCapabilityHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent evt) {
+    public void onPlayerTick(final TickEvent.PlayerTickEvent evt) {
 
         if (evt.phase == TickEvent.Phase.END) {
 
@@ -33,16 +33,16 @@ public class CommonHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent evt) {
+    public void onEntityJoinWorld(final EntityJoinWorldEvent evt) {
 
         if (evt.getEntity() instanceof ServerPlayerEntity) {
 
             ServerPlayerEntity player = (ServerPlayerEntity) evt.getEntity();
-            int i = player.getCapability(CapabilityHolder.airHopsCap).map(AirHopsCapability::getAirHops).orElse(0);
+            int jumps = player.getCapability(CapabilityHolder.airHopsCap).map(AirHopsCapability::getAirHops).orElse(0);
 
-            if (i > 0) {
+            if (jumps > 0) {
 
-                NetworkHandler.sendTo(new AirHopMessage(new AirHopMessage.AirHopMessageData(i)), player);
+                NetworkHandler.sendTo(new AirHopMessage(new AirHopMessage.AirHopMessageData(jumps)), player);
 
             }
 
@@ -52,7 +52,7 @@ public class CommonHandler {
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onEntityConstructing(AttachCapabilitiesEvent<Entity> evt){
+    public void onEntityConstructing(final AttachCapabilitiesEvent<Entity> evt){
 
         if (evt.getObject() instanceof PlayerEntity) {
             if (!evt.getObject().getCapability(CapabilityHolder.airHopsCap).isPresent()) {

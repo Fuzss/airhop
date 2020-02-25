@@ -1,7 +1,7 @@
 package com.fuzs.airhop.network;
 
 import com.fuzs.airhop.AirHop;
-import com.fuzs.airhop.network.messages.AirHopMessage;
+import com.fuzs.airhop.network.message.AirHopMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;

@@ -1,8 +1,8 @@
-package com.fuzs.airhop.handler;
+package com.fuzs.airhop.client;
 
-import com.fuzs.airhop.helper.JumpHelper;
+import com.fuzs.airhop.common.helper.PerformJumpHelper;
 import com.fuzs.airhop.network.NetworkHandler;
-import com.fuzs.airhop.network.messages.AirHopMessage;
+import com.fuzs.airhop.network.message.AirHopMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraftforge.client.event.InputEvent;
@@ -10,11 +10,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
-public class ClientHandler {
+public class InitiateJumpHandler {
+
+    private final PerformJumpHelper jumpHelper = new PerformJumpHelper();
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onKeyInput(InputEvent.KeyInputEvent evt) {
+    public void onKeyInput(final InputEvent.KeyInputEvent evt) {
 
         Minecraft mc = Minecraft.getInstance();
 
@@ -26,7 +28,7 @@ public class ClientHandler {
         if(mc.gameSettings.keyBindJump.isKeyDown()) {
 
             ClientPlayerEntity player = mc.player;
-            if (JumpHelper.doJump(player, player.movementInput.sneak)) {
+            if (this.jumpHelper.doJump(player, player.movementInput.sneak)) {
                 NetworkHandler.sendToServer(new AirHopMessage(new AirHopMessage.AirHopMessageData(0)));
             }
 

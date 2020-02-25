@@ -25,17 +25,17 @@ public class CapabilityHolder {
 
         CapabilityManager.INSTANCE.register(AirHopsCapability.class, new Capability.IStorage<AirHopsCapability>() {
 
-            @Override
-            public void readNBT(Capability<AirHopsCapability> capability, AirHopsCapability instance, Direction side, INBT nbt) {
-                instance.read((CompoundNBT) nbt);
-            }
-
             @Nonnull
             @Override
             public INBT writeNBT(Capability<AirHopsCapability> capability, AirHopsCapability instance, Direction facing) {
                 CompoundNBT nbt = new CompoundNBT();
                 instance.write(nbt);
                 return nbt;
+            }
+
+            @Override
+            public void readNBT(Capability<AirHopsCapability> capability, AirHopsCapability instance, Direction side, INBT nbt) {
+                instance.read((CompoundNBT) nbt);
             }
 
         }, AirHopsCapability::new);
