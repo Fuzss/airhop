@@ -30,6 +30,7 @@ public class AirHop {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(AirHopEnchantments::onRegistryEnchantment);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigBuildHandler.SPEC, MODID + ".toml");
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(AirHopEnchantments::onModConfig);
 
     }
 

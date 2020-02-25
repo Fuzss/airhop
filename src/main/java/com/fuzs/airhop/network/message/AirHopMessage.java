@@ -72,11 +72,8 @@ public class AirHopMessage {
                 } else {
 
                     ClientPlayerEntity player = Minecraft.getInstance().player;
-
-                    if (!player.onGround) {
-
+                    if (player != null && !player.onGround) {
                         player.getCapability(CapabilityHolder.airHopsCap).ifPresent(it -> it.setAirHops(data.getHops()));
-
                     }
 
                 }

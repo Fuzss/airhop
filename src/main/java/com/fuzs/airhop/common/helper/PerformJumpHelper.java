@@ -64,8 +64,7 @@ public class PerformJumpHelper {
     @SuppressWarnings("ConstantConditions")
     private int possibleJumps(PlayerEntity player) {
 
-        return player.inventory.armorInventory.stream().mapToInt(itemStack -> Math.min(AirHopEnchantments.AIR_HOP.getMaxLevel(),
-                EnchantmentHelper.getEnchantmentLevel(AirHopEnchantments.AIR_HOP, itemStack))).sum();
+        return player.inventory.armorInventory.stream().mapToInt(itemStack -> EnchantmentHelper.getEnchantmentLevel(AirHopEnchantments.AIR_HOP, itemStack)).sum();
 
     }
 
