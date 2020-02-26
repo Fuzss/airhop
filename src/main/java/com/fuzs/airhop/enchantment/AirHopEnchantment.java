@@ -1,6 +1,5 @@
 package com.fuzs.airhop.enchantment;
 
-import com.fuzs.airhop.AirHop;
 import com.fuzs.airhop.config.ConfigBuildHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.EquipmentSlotType;
