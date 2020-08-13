@@ -5,38 +5,31 @@ import com.fuzs.airhop.config.ConfigBuildHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 
+@Mod.EventBusSubscriber(modid = AirHop.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@ObjectHolder(AirHop.MODID)
 public class AirHopEnchantments {
 
-    private static final String AIR_HOP_NAME = "air_hop";
-
-    @ObjectHolder(AirHop.MODID + ":" + AIR_HOP_NAME)
+    @ObjectHolder("air_hop")
     public static final Enchantment AIR_HOP = null;
 
+    @SuppressWarnings("unused")
+    @SubscribeEvent
     public static void onRegistryEnchantment(final RegistryEvent.Register<Enchantment> evt) {
 
-        if (evt.getName().equals(ForgeRegistries.ENCHANTMENTS.getRegistryName())) {
-            evt.getRegistry().register(new AirHopEnchantment(ConfigBuildHandler.ENCHANTMENT_CONFIG.rarity.get()).setRegistryName(buildLocation(AIR_HOP_NAME)));
-        }
+        if (evt.getRegistry().equals(ForgeRegistries.ENCHANTMENTS)) {
 
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public static void onModConfig(final ModConfig.ModConfigEvent evt) {
-
-        if (evt.getConfig().getSpec() == ConfigBuildHandler.SPEC) {
-
-            AirHopEnchantments.AIR_HOP.type = ConfigBuildHandler.ENCHANTMENT_CONFIG.type.get().getType();
-
+            evt.getRegistry().register(new AirHopEnchantment(Enchantment.Rarity.RARE).setRegistryName(locate("air_hop")));
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private static ResourceLocation buildLocation(String key) {
-        return new ResourceLocation(AirHop.MODID, key);
+    public static ResourceLocation locate(String name) {
+
+        return new ResourceLocation(AirHop.MODID, name);
     }
 
 }

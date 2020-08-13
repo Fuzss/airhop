@@ -2,6 +2,7 @@ package com.fuzs.airhop.enchantment;
 
 import com.fuzs.airhop.config.ConfigBuildHandler;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
 /**
@@ -12,9 +13,9 @@ public class AirHopEnchantment extends Enchantment {
     private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[]
             {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
 
-    @SuppressWarnings("ConstantConditions")
     public AirHopEnchantment(Rarity rarityIn) {
-        super(rarityIn, null, ARMOR_SLOTS);
+
+        super(rarityIn, EnchantmentType.ARMOR, ARMOR_SLOTS);
     }
 
     /**
@@ -40,12 +41,12 @@ public class AirHopEnchantment extends Enchantment {
      */
     @Override
     public int getMaxLevel() {
-        return ConfigBuildHandler.ENCHANTMENT_CONFIG.maxLevel.get();
+        return ConfigBuildHandler.MAX_LEVEL.get();
     }
 
     @Override
     public boolean isTreasureEnchantment() {
-        return ConfigBuildHandler.ENCHANTMENT_CONFIG.treasureEnchantment.get();
+        return ConfigBuildHandler.TREASURE_ENCHANTMENT.get();
     }
 
 }

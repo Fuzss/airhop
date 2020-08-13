@@ -1,7 +1,7 @@
-package com.fuzs.airhop.common.helper;
+package com.fuzs.airhop.common.util;
 
-import com.fuzs.airhop.capability.AirHopsCapability;
-import com.fuzs.airhop.capability.CapabilityHolder;
+import com.fuzs.airhop.capability.AirHopCapabilities;
+import com.fuzs.airhop.capability.storage.AirHopsCapability;
 import com.fuzs.airhop.config.ConfigBuildHandler;
 import com.fuzs.airhop.enchantment.AirHopEnchantments;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -13,74 +13,64 @@ import net.minecraft.item.Items;
 
 public class PerformJumpHelper {
 
+    @SuppressWarnings("ConstantConditions")
     public boolean doJump(PlayerEntity player, boolean sneaking) {
 
-        if (!allowJump(player, sneaking)) {
+        if (!this.allowJump(player, sneaking)) {
+
             return false;
         }
 
-        int jumps = player.getCapability(CapabilityHolder.airHopsCap).map(AirHopsCapability::getAirHops).orElse(Integer.MAX_VALUE);
-
+        int jumps = player.getCapability(AirHopCapabilities.AIR_HOPS).map(AirHopsCapability::getAirHops).orElse(Integer.MAX_VALUE);
         if (jumps < this.possibleJumps(player)) {
 
             player.jump();
-            player.getCapability(CapabilityHolder.airHopsCap).ifPresent(AirHopsCapability::addAirHop);
-            this.setFallDistance(player);
+            // it's reset on the server anyways for every jump, so might as well do it here for both sides
+            player.fallDistance = 0.0F;
+            player.getCapability(AirHopCapabilities.AIR_HOPS).ifPresent(AirHopsCapability::addAirHop);
             this.addExtraExhaustion(player);
 
             return true;
-
         }
 
         return false;
-
     }
 
     private boolean allowJump(PlayerEntity player, boolean sneaking) {
 
-        boolean performingAction = player.onGround || player.isPassenger() || player.abilities.isFlying;
+        boolean performingAction = player.func_233570_aj_() || player.isPassenger() || player.abilities.isFlying;
         boolean insideLiquid = player.isInWater() || player.isInLava();
-
         if (performingAction || insideLiquid) {
+
             return false;
         }
 
         ItemStack itemstack = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
         boolean fallFlyingReady = !player.isElytraFlying() && itemstack.getItem() == Items.ELYTRA && ElytraItem.isUsable(itemstack);
+        if (ConfigBuildHandler.INVERT_ELYTRA.get()) {
 
-        if (ConfigBuildHandler.GENERAL_CONFIG.invertElytra.get()) {
             sneaking = !sneaking;
         }
 
         if (fallFlyingReady && !sneaking) {
+
             return false;
         }
 
-        return player.abilities.allowFlying || !ConfigBuildHandler.GENERAL_CONFIG.disableOnHungry.get() || player.getFoodStats()
-                .getFoodLevel() > ConfigBuildHandler.GENERAL_CONFIG.foodThreshold.get();
-
+        return player.abilities.allowFlying || !ConfigBuildHandler.DISABLE_ON_HUNGRY.get() || player.getFoodStats()
+                .getFoodLevel() > ConfigBuildHandler.FOOD_THRESHOLD.get();
     }
 
     @SuppressWarnings("ConstantConditions")
     private int possibleJumps(PlayerEntity player) {
 
         return player.inventory.armorInventory.stream().mapToInt(itemStack -> EnchantmentHelper.getEnchantmentLevel(AirHopEnchantments.AIR_HOP, itemStack)).sum();
-
-    }
-
-    private void setFallDistance(PlayerEntity player) {
-
-        float f = -1.25F;
-        player.fallDistance = ConfigBuildHandler.GENERAL_CONFIG.resetFallDistance.get() ? f * player.getCapability(CapabilityHolder.airHopsCap)
-                .map(AirHopsCapability::getAirHops).orElse(Integer.MAX_VALUE) : player.fallDistance + f;
-
     }
 
     private void addExtraExhaustion(PlayerEntity player) {
 
-        float f = (float) Math.max(ConfigBuildHandler.GENERAL_CONFIG.hopExhaustion.get() - 1.0, 0);
+        float f = (float) Math.max(ConfigBuildHandler.HOP_EXHAUSTION.get() - 1.0, 0);
         player.addExhaustion(player.isSprinting() ? 0.2F * f : 0.05F * f);
-
     }
 
 }

@@ -1,25 +1,27 @@
 package com.fuzs.airhop.client;
 
-import com.fuzs.airhop.common.helper.PerformJumpHelper;
 import com.fuzs.airhop.network.NetworkHandler;
-import com.fuzs.airhop.network.message.AirHopMessage;
+import com.fuzs.airhop.network.message.SimpleHopMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
+@OnlyIn(Dist.CLIENT)
 public class InitiateJumpHandler {
 
     private final Minecraft mc = Minecraft.getInstance();
-    private final PerformJumpHelper jumpHelper = new PerformJumpHelper();
 
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onKeyInput(final InputEvent.KeyInputEvent evt) {
 
         if (!this.mc.isGameFocused() || evt.getAction() != GLFW_PRESS) {
+
             return;
         }
 
@@ -27,13 +29,11 @@ public class InitiateJumpHandler {
         if(this.mc.gameSettings.keyBindJump.isKeyDown()) {
 
             ClientPlayerEntity player = this.mc.player;
-            if (player != null && this.jumpHelper.doJump(player, player.movementInput.field_228350_h_)) {
-                NetworkHandler.sendToServer(new AirHopMessage(new AirHopMessage.AirHopMessageData(0)));
+            if (player != null && SimpleHopMessage.JUMP_HELPER.doJump(player, player.movementInput.sneaking)) {
+
+                NetworkHandler.getInstance().sendToServer(new SimpleHopMessage());
             }
-
-
         }
-
     }
 
 }

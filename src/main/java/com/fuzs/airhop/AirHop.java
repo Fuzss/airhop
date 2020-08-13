@@ -1,10 +1,9 @@
 package com.fuzs.airhop;
 
-import com.fuzs.airhop.capability.CapabilityHolder;
+import com.fuzs.airhop.capability.CapabilityController;
 import com.fuzs.airhop.client.InitiateJumpHandler;
 import com.fuzs.airhop.common.SyncCapabilityHandler;
 import com.fuzs.airhop.config.ConfigBuildHandler;
-import com.fuzs.airhop.enchantment.AirHopEnchantments;
 import com.fuzs.airhop.network.NetworkHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -26,26 +25,21 @@ public class AirHop {
 
     public AirHop() {
 
+        NetworkHandler.getInstance().init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AirHopEnchantments::onRegistryEnchantment);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigBuildHandler.SPEC, MODID + ".toml");
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(AirHopEnchantments::onModConfig);
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent evt) {
 
-        NetworkHandler.init();
-        CapabilityHolder.register();
+        CapabilityController.register();
         MinecraftForge.EVENT_BUS.register(new SyncCapabilityHandler());
-
     }
 
     private void clientSetup(final FMLClientSetupEvent evt) {
 
         MinecraftForge.EVENT_BUS.register(new InitiateJumpHandler());
-
     }
 
 }
