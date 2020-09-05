@@ -6,16 +6,13 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
 /**
- * Values are based on the frost walker enchantment
+ * Values based on frost walker enchantment
  */
 public class AirHopEnchantment extends Enchantment {
 
-    private static final EquipmentSlotType[] ARMOR_SLOTS = new EquipmentSlotType[]
-            {EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+    public AirHopEnchantment(Rarity rarityIn, EquipmentSlotType... slots) {
 
-    public AirHopEnchantment(Rarity rarityIn) {
-
-        super(rarityIn, EnchantmentType.ARMOR, ARMOR_SLOTS);
+        super(rarityIn, EnchantmentType.ARMOR_FEET, slots);
     }
 
     /**

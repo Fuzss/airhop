@@ -37,7 +37,7 @@ public class SyncHopMessage implements IMessage {
     @Override
     public void processPacket(@Nullable final PlayerEntity player) {
 
-        if (player != null && !player.func_233570_aj_()) {
+        if (player != null && !player.isOnGround()) {
 
             player.getCapability(AirHopCapabilities.AIR_HOPS).ifPresent(cap -> cap.setAirHops(this.hops));
         }

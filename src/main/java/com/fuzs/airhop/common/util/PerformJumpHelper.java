@@ -22,13 +22,19 @@ public class PerformJumpHelper {
         }
 
         int jumps = player.getCapability(AirHopCapabilities.AIR_HOPS).map(AirHopsCapability::getAirHops).orElse(Integer.MAX_VALUE);
-        if (jumps < this.possibleJumps(player)) {
+        if (jumps < EnchantmentHelper.getMaxEnchantmentLevel(AirHopEnchantments.AIR_HOP, player)) {
 
             player.jump();
             // it's reset on the server anyways for every jump, so might as well do it here for both sides
             player.fallDistance = 0.0F;
             player.getCapability(AirHopCapabilities.AIR_HOPS).ifPresent(AirHopsCapability::addAirHop);
+
             this.addExtraExhaustion(player);
+            if (player.getRNG().nextDouble() < ConfigBuildHandler.DAMAGE_CHANCE.get()) {
+
+                ItemStack itemstack = player.getItemStackFromSlot(EquipmentSlotType.FEET);
+                itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(EquipmentSlotType.FEET));
+            }
 
             return true;
         }
@@ -38,7 +44,7 @@ public class PerformJumpHelper {
 
     private boolean allowJump(PlayerEntity player, boolean sneaking) {
 
-        boolean performingAction = player.func_233570_aj_() || player.isPassenger() || player.abilities.isFlying;
+        boolean performingAction = player.isOnGround() || player.isPassenger() || player.abilities.isFlying;
         boolean insideLiquid = player.isInWater() || player.isInLava();
         if (performingAction || insideLiquid) {
 
@@ -59,12 +65,6 @@ public class PerformJumpHelper {
 
         return player.abilities.allowFlying || !ConfigBuildHandler.DISABLE_ON_HUNGRY.get() || player.getFoodStats()
                 .getFoodLevel() > ConfigBuildHandler.FOOD_THRESHOLD.get();
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    private int possibleJumps(PlayerEntity player) {
-
-        return player.inventory.armorInventory.stream().mapToInt(itemStack -> EnchantmentHelper.getEnchantmentLevel(AirHopEnchantments.AIR_HOP, itemStack)).sum();
     }
 
     private void addExtraExhaustion(PlayerEntity player) {

@@ -15,6 +15,7 @@ public class ConfigBuildHandler {
     // enchantment
     public static final ForgeConfigSpec.IntValue MAX_LEVEL;
     public static final ForgeConfigSpec.BooleanValue TREASURE_ENCHANTMENT;
+    public static final ForgeConfigSpec.DoubleValue DAMAGE_CHANCE;
 
     static {
 
@@ -29,6 +30,7 @@ public class ConfigBuildHandler {
         BUILDER.push("enchantment");
         MAX_LEVEL = BUILDER.comment("Maximum level for this enchantment. Each level provides one additional air hop.").defineInRange("Maximum Level", 3, 0, Integer.MAX_VALUE);
         TREASURE_ENCHANTMENT = BUILDER.comment("Makes the enchantment unobtainable from enchanting tables. It is only available on items from loot chests, fishing and villager trading.").define("Treasure Enchantment", true);
+        DAMAGE_CHANCE = BUILDER.comment("Chance the player's boots will be damaged by an air hop.").defineInRange("Damage Chance", 0.0, 0.0, 1.0);
         BUILDER.pop();
     }
 

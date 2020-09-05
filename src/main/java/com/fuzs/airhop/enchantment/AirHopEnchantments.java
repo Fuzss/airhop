@@ -1,8 +1,8 @@
 package com.fuzs.airhop.enchantment;
 
 import com.fuzs.airhop.AirHop;
-import com.fuzs.airhop.config.ConfigBuildHandler;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,7 +23,7 @@ public class AirHopEnchantments {
 
         if (evt.getRegistry().equals(ForgeRegistries.ENCHANTMENTS)) {
 
-            evt.getRegistry().register(new AirHopEnchantment(Enchantment.Rarity.RARE).setRegistryName(locate("air_hop")));
+            evt.getRegistry().register(new AirHopEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.FEET).setRegistryName(locate("air_hop")));
         }
     }
 

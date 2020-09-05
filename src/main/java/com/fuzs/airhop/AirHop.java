@@ -5,7 +5,9 @@ import com.fuzs.airhop.client.InitiateJumpHandler;
 import com.fuzs.airhop.common.SyncCapabilityHandler;
 import com.fuzs.airhop.config.ConfigBuildHandler;
 import com.fuzs.airhop.network.NetworkHandler;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -26,18 +28,22 @@ public class AirHop {
     public AirHop() {
 
         NetworkHandler.getInstance().init();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigBuildHandler.SPEC, MODID + ".toml");
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigBuildHandler.SPEC);
+
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        });
     }
 
-    private void commonSetup(final FMLCommonSetupEvent evt) {
+    private void onCommonSetup(final FMLCommonSetupEvent evt) {
 
         CapabilityController.register();
         MinecraftForge.EVENT_BUS.register(new SyncCapabilityHandler());
     }
 
-    private void clientSetup(final FMLClientSetupEvent evt) {
+    private void onClientSetup(final FMLClientSetupEvent evt) {
 
         MinecraftForge.EVENT_BUS.register(new InitiateJumpHandler());
     }
