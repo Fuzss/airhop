@@ -1,11 +1,17 @@
-package com.fuzs.airhop.handler;
+package com.fuzs.airhop.config;
 
 import com.fuzs.airhop.AirHop;
-import com.fuzs.airhop.util.EnumArmorType;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
+@Mod.EventBusSubscriber(modid = AirHop.MODID)
 @Config(modid = AirHop.MODID)
 public class ConfigHandler {
 
@@ -59,5 +65,45 @@ public class ConfigHandler {
     @Config.Comment("Exhaustion multiplier per air hop compared to normal jumps.")
     @Config.RangeDouble(min = 0)
     public static double hopExhaustion = 4.0;
+
+    @SuppressWarnings("unused")
+    @SubscribeEvent
+    public void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent evt) {
+
+        if (evt.getModID().equals(AirHop.MODID)) {
+
+            ConfigManager.sync(AirHop.MODID, Config.Type.INSTANCE);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public enum EnumArmorType {
+
+        ALL(EnumEnchantmentType.ARMOR, null),
+        HELMET(EnumEnchantmentType.ARMOR_HEAD, EntityEquipmentSlot.HEAD),
+        CHESTPLATE(EnumEnchantmentType.ARMOR_CHEST, EntityEquipmentSlot.CHEST),
+        LEGGINGS(EnumEnchantmentType.ARMOR_LEGS, EntityEquipmentSlot.LEGS),
+        BOOTS(EnumEnchantmentType.ARMOR_FEET, EntityEquipmentSlot.FEET);
+
+        private final EnumEnchantmentType enchantmentType;
+        private final EntityEquipmentSlot equipmentSlot;
+
+        EnumArmorType(EnumEnchantmentType type, EntityEquipmentSlot slot) {
+
+            this.enchantmentType = type;
+            this.equipmentSlot = slot;
+        }
+
+        public EnumEnchantmentType getType() {
+
+            return this.enchantmentType;
+        }
+
+        public EntityEquipmentSlot getSlot() {
+
+            return this.equipmentSlot;
+        }
+
+    }
 
 }

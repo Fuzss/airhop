@@ -1,5 +1,5 @@
 # Air Hop
-Adds an enchantment that lets you double, triple, or even quadruple jump. What do you want more in life?
 
-## Downloads
-Check this project out on [Curse](https://www.curseforge.com/minecraft/mc-mods/air-hop).
+A Minecraft mod. Downloads can be found on CurseForge.
+
+![](https://i.imgur.com/MinxlVJ.png)

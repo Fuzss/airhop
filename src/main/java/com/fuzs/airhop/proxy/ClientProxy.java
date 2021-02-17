@@ -1,7 +1,6 @@
 package com.fuzs.airhop.proxy;
 
-import com.fuzs.airhop.handler.ClientHandler;
-import com.fuzs.airhop.handler.CommonHandler;
+import com.fuzs.airhop.client.handler.PerformJumpHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -10,13 +9,15 @@ import net.minecraftforge.common.MinecraftForge;
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void preInit() {
-        MinecraftForge.EVENT_BUS.register(new CommonHandler());
-        MinecraftForge.EVENT_BUS.register(new ClientHandler());
+    public void onInit() {
+
+        super.onInit();
+        MinecraftForge.EVENT_BUS.register(new PerformJumpHandler());
     }
 
     @Override
     public EntityPlayer getClientPlayer() {
+
         return Minecraft.getMinecraft().player;
     }
 

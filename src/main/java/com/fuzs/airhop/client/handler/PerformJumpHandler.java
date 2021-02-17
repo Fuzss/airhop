@@ -1,40 +1,35 @@
-package com.fuzs.airhop.handler;
+package com.fuzs.airhop.client.handler;
 
-import com.fuzs.airhop.helper.JumpHelper;
+import com.fuzs.airhop.util.JumpHelper;
 import com.fuzs.airhop.network.NetworkHandler;
 import com.fuzs.airhop.network.messages.MessageDoAirJump;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
-@SuppressWarnings("unused")
-public class ClientHandler {
+public class PerformJumpHandler {
+    
+    private final Minecraft mc = Minecraft.getMinecraft();
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
-    public void onKeyInput(InputEvent.KeyInputEvent evt) {
-
-        Minecraft mc = Minecraft.getMinecraft();
+    public void onKeyInput(final InputEvent.KeyInputEvent evt) {
 
         // repeat events are enabled on join world by default which shouldn't really be the case
-        if (mc.currentScreen == null) {
+        if (this.mc.currentScreen == null) {
+            
             Keyboard.enableRepeatEvents(false);
         }
 
-        EntityPlayerSP player = mc.player;
         // can't use player.movementInput.jump as it triggers too often
-        boolean down = mc.gameSettings.keyBindJump.isKeyDown();
+        if(this.mc.inGameHasFocus && this.mc.gameSettings.keyBindJump.isKeyDown()) {
 
-        if(mc.inGameHasFocus && down) {
-
-            if (JumpHelper.doJump(player, player.movementInput.sneak)) {
+            if (JumpHelper.doJump(this.mc.player, this.mc.player.movementInput.sneak)) {
+                
                 NetworkHandler.sendToServer(new MessageDoAirJump());
             }
-
-
         }
-
     }
 
 }

@@ -1,11 +1,25 @@
 package com.fuzs.airhop.proxy;
 
+import com.fuzs.airhop.capability.CapabilityController;
+import com.fuzs.airhop.handler.CapabilityHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
 
-public abstract class CommonProxy{
+public class CommonProxy {
 
-    public abstract void preInit();
+    public void onPreInit() {
 
-    public abstract EntityPlayer getClientPlayer();
+        MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
+    }
+
+    public void onInit() {
+
+        MinecraftForge.EVENT_BUS.register(new CapabilityController());
+    }
+
+    public EntityPlayer getClientPlayer() {
+
+        return null;
+    }
 
 }

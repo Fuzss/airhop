@@ -1,11 +1,9 @@
-[
-{
-  "modid": "airhop",
-  "name": "Air Hop",
+[{
+  "modid": "${mod_id}",
+  "name": "${mod_name}",
   "description": "${mod_description}",
   "version": "${mod_version}",
   "mcversion": "${mc_version}",
-  "url": "https://www.curseforge.com/minecraft/mc-mods/${mod_slug}",
+  "url": "${mod_url}",
   "authorList": ["${mod_author}"]
-}
-]
+}]

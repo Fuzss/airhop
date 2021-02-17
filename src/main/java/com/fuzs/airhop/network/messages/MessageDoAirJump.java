@@ -1,7 +1,7 @@
 package com.fuzs.airhop.network.messages;
 
-import com.fuzs.airhop.handler.ConfigHandler;
-import com.fuzs.airhop.helper.JumpHelper;
+import com.fuzs.airhop.config.ConfigHandler;
+import com.fuzs.airhop.util.JumpHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,8 +31,8 @@ public class MessageDoAirJump extends MessageBase<MessageDoAirJump> {
             if (JumpHelper.doJump(player, !ConfigHandler.invertElytra)) {
 
                 if (ConfigHandler.summonCloud) {
-                    world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ,
-                            15, 0.25F, 0.0F, 0.25F, 0.01F);
+
+                    world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, 15, 0.25F, 0.0F, 0.25F, 0.01F);
                 }
 
             }
