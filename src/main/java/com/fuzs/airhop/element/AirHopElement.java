@@ -104,8 +104,8 @@ public class AirHopElement extends AbstractElement implements ICommonElement {
             ILivingEntityAccessor playerAccessor = (ILivingEntityAccessor) evt.player;
             if (playerAccessor.getIsJumping() && playerAccessor.getJumpTicks() == 0 && this.attemptJump(evt.player)) {
 
-                // longer than usual as it's more prone to being double activated accidentally
-                playerAccessor.setJumpTicks(16);
+                // prevent accidental usage of air hops
+                playerAccessor.setJumpTicks(10);
                 // trigger jump on server
                 PuzzlesLib.getNetworkHandler().sendToServer(new CAirHopMessage());
             }
@@ -159,7 +159,7 @@ public class AirHopElement extends AbstractElement implements ICommonElement {
 
     private boolean canJump(PlayerEntity player) {
 
-        boolean isAirborne = !player.isOnGround() && (!this.fallingOnly || this.getJumpHeight(player) / 2.0F < player.fallDistance);
+        boolean isAirborne = !player.onGround && (!this.fallingOnly || getJumpHeight(player) / 2.0F < player.fallDistance);
         boolean isPerformingAction = player.isPassenger() || player.abilities.isFlying || player.isOnLadder();
 
         return isAirborne && !isPerformingAction && !(player.isInWater() || player.isInLava());
@@ -188,14 +188,14 @@ public class AirHopElement extends AbstractElement implements ICommonElement {
             capability.resetAirHops();
             if (!this.fallDamage && airHops > 0) {
 
-                return Math.max(0.0F, fallDistance - airHops * this.getJumpHeight(player));
+                return Math.max(0.0F, fallDistance - airHops * getJumpHeight(player));
             }
         }
 
         return fallDistance;
     }
 
-    private float getJumpHeight(PlayerEntity player) {
+    private static float getJumpHeight(PlayerEntity player) {
 
         float jumpHeight = 1.25F;
         if (player.isPotionActive(Effects.JUMP_BOOST)) {

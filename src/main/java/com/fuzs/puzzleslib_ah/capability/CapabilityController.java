@@ -18,11 +18,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
@@ -43,12 +41,10 @@ public class CapabilityController {
      */
     public CapabilityController() {
 
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.addListener(this::onAttachCapabilities);
     }
 
-    @SuppressWarnings("unused")
-    @SubscribeEvent
-    public <T extends Type> void onAttachCapabilities(final AttachCapabilitiesEvent<?> evt) {
+    private void onAttachCapabilities(final AttachCapabilitiesEvent<?> evt) {
 
         this.capabilityEntries.get((Class<?>) evt.getGenericType()).forEach(capability -> {
 

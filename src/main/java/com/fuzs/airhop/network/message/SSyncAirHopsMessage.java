@@ -42,7 +42,7 @@ public class SSyncAirHopsMessage extends Message {
         @Override
         public void accept(PlayerEntity playerEntity) {
 
-            if (!playerEntity.isOnGround()) {
+            if (!playerEntity.onGround) {
 
                 CapabilityController.getCapability(playerEntity, AirHopElement.AIR_HOPS_CAPABILITY)
                         .ifPresent(cap -> cap.setAirHops(SSyncAirHopsMessage.this.airHops));
