@@ -22,7 +22,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
@@ -48,7 +47,7 @@ public class CapabilityController {
 
     @SuppressWarnings("unused")
     @SubscribeEvent
-    public <T extends Type> void onAttachCapabilities(final AttachCapabilitiesEvent<?> evt) {
+    public void onAttachCapabilities(final AttachCapabilitiesEvent<?> evt) {
 
         this.capabilityEntries.get((Class<?>) evt.getGenericType()).forEach(capability -> {
 

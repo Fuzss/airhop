@@ -5,7 +5,6 @@ import com.google.common.collect.ArrayListMultimap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -23,13 +22,9 @@ public class RegistryManager implements INamespaceLocator {
     private final ArrayListMultimap<Class<?>, IForgeRegistryEntry<?>> registryEntries = ArrayListMultimap.create();
 
     /**
-     * add listener for {@link RegistryEvent}
+     * listener is added in main mod class so it's always puzzles lib itself and not the first mod registering something
+     * @param evt all forge registry events
      */
-    public RegistryManager() {
-
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
-    }
-
     @SuppressWarnings("unused")
     @SubscribeEvent
     public void onRegistryRegister(RegistryEvent.Register<?> evt) {
