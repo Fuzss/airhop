@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -39,11 +40,15 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
     @ObjectHolder(AirHop.MODID + ":" + "air_hop")
     public static final Enchantment AIR_HOP_ENCHANTMENT = null;
 
+    @ObjectHolder(AirHop.MODID + ":" + "entity.player.hop")
+    public static final SoundEvent ENTITY_PLAYER_HOP_SOUND = null;
+
     @CapabilityInject(IAirHopsCapability.class)
     public static final Capability<AirHopsCapability> AIR_HOPS_CAPABILITY = null;
 
     // common config
     public boolean summonCloud;
+    public boolean hopSound;
     public double damageChance;
     private boolean fallDamage;
     // client config
@@ -61,6 +66,7 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
     public void setupCommon() {
 
         PuzzlesLib.getRegistryManager().register("air_hop", new AirHopEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.FEET));
+        PuzzlesLib.getRegistryManager().register("entity.player.hop", new SoundEvent(new ResourceLocation(AirHop.MODID, "entity.player.hop")));
         this.addListener(this::onEntityJoinWorld);
         this.addListener(this::onLivingFall);
         this.addListener(this::onPlayerFall);
@@ -92,7 +98,8 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
     public void setupCommonConfig(ForgeConfigSpec.Builder builder) {
 
         addToConfig(builder.comment("Spawn a small particle cloud at the players feet on every air hop.").define("Spawn Particle Cloud", true), v -> this.summonCloud = v);
-        addToConfig(builder.comment("Chance the player's boots will be damaged by an air hop.").defineInRange("Boots Damage Chance", 0.35, 0.0, 1.0), v -> this.damageChance = v);
+        addToConfig(builder.comment("Play a funny sound effect whenever the player hops in mid-air.").define("Play Hop Sound", true), v -> this.hopSound = v);
+        addToConfig(builder.comment("Chance the player's boots will be damaged by an air hop.").defineInRange("Boots Damage Chance", 0.4, 0.0, 1.0), v -> this.damageChance = v);
         addToConfig(builder.comment("Take normal fall damage when hitting the ground after air hopping.").define("Inflict Fall Damage", false), v -> this.fallDamage = v);
     }
 

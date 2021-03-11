@@ -1,7 +1,7 @@
 package com.fuzs.puzzleslib_ah.element;
 
 import com.fuzs.puzzleslib_ah.config.ConfigManager;
-import com.fuzs.puzzleslib_ah.config.deserialize.EntryCollectionBuilder;
+import com.fuzs.puzzleslib_ah.config.serialization.EntryCollectionBuilder;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Cancelable;
