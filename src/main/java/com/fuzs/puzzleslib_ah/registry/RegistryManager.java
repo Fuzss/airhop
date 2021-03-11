@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 /**
  * handles registering to forge registries
- * heavily inspired by the one found in Vazkii's AutoRegLib
+ * heavily inspired by RegistryHelper found in Vazkii's AutoRegLib
  */
 public class RegistryManager implements INamespaceLocator {
 

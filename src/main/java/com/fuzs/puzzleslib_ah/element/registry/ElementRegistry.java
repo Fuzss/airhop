@@ -9,6 +9,7 @@ import com.fuzs.puzzleslib_ah.element.side.IServerElement;
 import com.fuzs.puzzleslib_ah.element.side.ISidedElement;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.config.ModConfig;
@@ -16,24 +17,65 @@ import net.minecraftforge.fml.event.lifecycle.ParallelDispatchEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * default registry for elements
+ * registry for elements
  */
 @SuppressWarnings("unused")
-public abstract class ElementRegistry {
+public class ElementRegistry {
 
     /**
-     * storage for elements of all mods for performing actions on all of them
+     * general storage for elements of all mods for performing actions on all of them
      */
     private static final BiMap<ResourceLocation, AbstractElement> ELEMENTS = HashBiMap.create();
+    /**
+     * all elements belonging to the active mod, will be cleared after those elements have been added to {@link #ELEMENTS}
+     * use tree map for alphabetical sorting cause why not
+     */
+    private static final TreeMap<String, AbstractElement> MOD_ELEMENTS = Maps.newTreeMap();
+
+    /**
+     * register an element
+     * @param key identifier for this element
+     * @param supplier supplier for element to be registered
+     * @return <code>element</code>
+     * @param <T> make sure element also extends ISidedElement
+     */
+    public static <T extends AbstractElement & ISidedElement> AbstractElement register(String key, Supplier<T> supplier) {
+
+        return register(key, supplier, FMLEnvironment.dist);
+    }
+
+    /**
+     * register an element
+     * @param key identifier for this element
+     * @param supplier supplier for element to be registered
+     * @param dist physical side to register on
+     * @return <code>element</code>
+     * @param <T> make sure element also extends ISidedElement
+     */
+    @Nullable
+    public static <T extends AbstractElement & ISidedElement> AbstractElement register(String key, Supplier<T> supplier, Dist dist) {
+
+        if (dist == FMLEnvironment.dist) {
+
+            AbstractElement element = supplier.get();
+
+            assert element instanceof ICommonElement || FMLEnvironment.dist.isClient() || element instanceof IServerElement : "Unable to register element: " + "Trying to register client element for server side";
+            assert element instanceof ICommonElement || FMLEnvironment.dist.isDedicatedServer() || element instanceof IClientElement : "Unable to register element: " + "Trying to register server element for client side";
+
+            MOD_ELEMENTS.put(key, element);
+
+            return element;
+        }
+
+        return null;
+    }
 
     /**
      * register an element, overload this to set mod namespace
@@ -148,18 +190,23 @@ public abstract class ElementRegistry {
 
     /**
      * generate general config section for controlling elements, setup individual config sections and collect events to be registered in {@link #load}
+     * @param namespace namespace of active mod
      */
-    protected static void setup(String namespace) {
+    public static void setup(String namespace) {
 
-        Set<AbstractElement> elements = getOwnElements(namespace);
+        assert !MOD_ELEMENTS.isEmpty() : "Unable to setup elements for " + namespace + ": " + "No elements registered";
 
-        assert !elements.isEmpty() : "Unable to setup elements for " + namespace + ": " + "No elements registered";
+        // add to main elements storage
+        MOD_ELEMENTS.forEach((key, value) -> ELEMENTS.put(new ResourceLocation(namespace, key), value));
 
-        setupGeneralSide(elements, element -> element instanceof ICommonElement, ModConfig.Type.COMMON, FMLEnvironment.dist);
-        setupGeneralSide(elements, element -> element instanceof IClientElement && !(element instanceof ICommonElement), ModConfig.Type.CLIENT, Dist.CLIENT);
-        setupGeneralSide(elements, element -> element instanceof IServerElement && !(element instanceof ICommonElement), ModConfig.Type.SERVER, Dist.DEDICATED_SERVER);
+        setupGeneralSide(MOD_ELEMENTS.values(), element -> element instanceof ICommonElement, ModConfig.Type.COMMON, FMLEnvironment.dist);
+        setupGeneralSide(MOD_ELEMENTS.values(), element -> element instanceof IClientElement && !(element instanceof ICommonElement), ModConfig.Type.CLIENT, Dist.CLIENT);
+        setupGeneralSide(MOD_ELEMENTS.values(), element -> element instanceof IServerElement && !(element instanceof ICommonElement), ModConfig.Type.SERVER, Dist.DEDICATED_SERVER);
 
-        elements.forEach(AbstractElement::setup);
+        MOD_ELEMENTS.values().forEach(AbstractElement::setup);
+
+        // prepare for next mod
+        MOD_ELEMENTS.clear();
     }
 
     /**
@@ -169,7 +216,7 @@ public abstract class ElementRegistry {
      * @param type config type to create general category for
      * @param dist physical side this element can only be registered on
      */
-    private static void setupGeneralSide(Set<AbstractElement> elements, Predicate<AbstractElement> isCurrentSide, ModConfig.Type type, Dist dist) {
+    private static void setupGeneralSide(Collection<AbstractElement> elements, Predicate<AbstractElement> isCurrentSide, ModConfig.Type type, Dist dist) {
 
         Set<AbstractElement> sideElements = elements.stream().filter(isCurrentSide).collect(Collectors.toSet());
         if (!sideElements.isEmpty()) {

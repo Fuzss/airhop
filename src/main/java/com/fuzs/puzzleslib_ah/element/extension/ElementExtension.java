@@ -25,9 +25,9 @@ public abstract class ElementExtension<T extends ExtensibleElement<?>> extends E
     }
 
     @Override
-    public final List<EventStorage<? extends Event>> getEvents() {
+    public final List<EventStorage<? extends Event>> getEventListeners() {
 
-        return this.parent.getEvents();
+        return this.parent.getEventListeners();
     }
 
 }

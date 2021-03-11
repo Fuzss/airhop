@@ -73,7 +73,7 @@ public abstract class EventListener {
     /**
      * @return event storage list
      */
-    protected abstract List<EventStorage<? extends Event>> getEvents();
+    protected abstract List<EventStorage<? extends Event>> getEventListeners();
 
     /**
      * Add a consumer listener with {@link EventPriority} set to {@link EventPriority#NORMAL}
@@ -116,7 +116,7 @@ public abstract class EventListener {
      */
     protected final <T extends Event> void addListener(Consumer<T> consumer, EventPriority priority, boolean receiveCancelled) {
 
-        this.getEvents().add(new EventStorage<>(consumer, priority, receiveCancelled));
+        this.getEventListeners().add(new EventStorage<>(consumer, priority, receiveCancelled));
     }
 
     /**

@@ -2,11 +2,14 @@ package com.fuzs.puzzleslib_ah;
 
 import com.fuzs.puzzleslib_ah.capability.CapabilityController;
 import com.fuzs.puzzleslib_ah.config.ConfigManager;
+import com.fuzs.puzzleslib_ah.element.AbstractElement;
 import com.fuzs.puzzleslib_ah.element.registry.ElementRegistry;
+import com.fuzs.puzzleslib_ah.element.side.ISidedElement;
 import com.fuzs.puzzleslib_ah.network.NetworkHandler;
 import com.fuzs.puzzleslib_ah.proxy.IProxy;
 import com.fuzs.puzzleslib_ah.registry.RegistryManager;
 import com.fuzs.puzzleslib_ah.util.PuzzlesLibUtil;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
@@ -18,6 +21,9 @@ import net.minecraftforge.fml.network.FMLNetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 //@Mod(PuzzlesLib.MODID)
@@ -97,6 +103,32 @@ public class PuzzlesLib {
     public static CapabilityController getCapabilityController() {
 
         return PuzzlesLibUtil.getOrElse(capabilityController, CapabilityController::new, instance -> capabilityController = instance);
+    }
+
+    /**
+     * register an element
+     * @param key identifier for this element
+     * @param supplier supplier for element to be registered
+     * @return <code>element</code>
+     * @param <T> make sure element also extends ISidedElement
+     */
+    protected static <T extends AbstractElement & ISidedElement> AbstractElement register(String key, Supplier<T> supplier) {
+
+        return ElementRegistry.register(key, supplier);
+    }
+
+    /**
+     * register an element
+     * @param key identifier for this element
+     * @param supplier supplier for element to be registered
+     * @param dist physical side to register on
+     * @return <code>element</code>
+     * @param <T> make sure element also extends ISidedElement
+     */
+    @Nullable
+    protected static <T extends AbstractElement & ISidedElement> AbstractElement register(String key, Supplier<T> supplier, Dist dist) {
+
+        return ElementRegistry.register(key, supplier, dist);
     }
 
 }
