@@ -17,7 +17,7 @@ public class AirHop extends PuzzlesLib {
     public static final String NAME = "Air Hop";
     public static final Logger LOGGER = LogManager.getLogger(AirHop.NAME);
 
-    public static final AbstractElement AIR_HOP = register("air_hop",AirHopElement::new);
+    public static final AbstractElement AIR_HOP = register("air_hop", AirHopElement::new);
 
     public AirHop() {
 
