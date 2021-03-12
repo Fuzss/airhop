@@ -1,4 +1,5 @@
 {
-  "enchantment.airhop.air_hop": "Lufthüpfer",
-  "enchantment.airhop.air_hop.desc": "Ermöglicht Sprünge in der Luft."
+  "enchantment.airhop.air_hop": "Lufth\u00FCpfer",
+  "enchantment.airhop.air_hop.desc": "Ermöglicht Spr\u00FCnge in der Luft.",
+  "subtitles.entity.player.hop": "Spieler h\u00FCpft"
 }

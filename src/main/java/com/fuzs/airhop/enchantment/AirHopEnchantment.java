@@ -1,7 +1,7 @@
 package com.fuzs.airhop.enchantment;
 
-import com.fuzs.airhop.AirHopElements;
-import com.fuzs.airhop.element.AirHopElement;
+import com.fuzs.airhop.AirHop;
+import com.fuzs.puzzleslib_ah.registry.loadable.LoadableEnchantment;
 import net.minecraft.enchantment.DepthStriderEnchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
@@ -11,7 +11,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 /**
  * values based on frost walker enchantment
  */
-public class AirHopEnchantment extends Enchantment {
+public class AirHopEnchantment extends LoadableEnchantment {
 
     public AirHopEnchantment(Rarity rarityIn, EquipmentSlotType... slots) {
 
@@ -33,30 +33,26 @@ public class AirHopEnchantment extends Enchantment {
     @Override
     public int getMaxLevel() {
 
-        return AirHopElements.<AirHopElement>getAs(AirHopElements.AIR_HOP).maxLevel;
+        // can't make this configurable as creative mod search is cached before config settings are loaded
+        return 3;
     }
 
     @Override
     public boolean isTreasureEnchantment() {
 
-        return AirHopElements.<AirHopElement>getAs(AirHopElements.AIR_HOP).treasureEnchantment;
+        return true;
     }
 
     @SuppressWarnings({"ConstantConditions", "NullableProblems"})
     @Override
     protected boolean canApplyTogether(Enchantment ench) {
 
-        if (!AirHopElements.<AirHopElement>getAs(AirHopElements.AIR_HOP).incompatibility) {
-
-            return super.canApplyTogether(ench);
-        }
-
         if (ench instanceof DepthStriderEnchantment || ench instanceof FrostWalkerEnchantment) {
 
             return false;
         }
 
-        // exclusive to some modding legacy mods
+        // exclusive to some modding legacy mods enchantments
         String path = ench.getRegistryName().getPath();
         if (path.equals("dashing") || path.equals("leaping") || path.equals("stepping")) {
 
@@ -65,4 +61,11 @@ public class AirHopEnchantment extends Enchantment {
 
         return super.canApplyTogether(ench);
     }
+
+    @Override
+    protected boolean isEnabled() {
+
+        return AirHop.AIR_HOP.isEnabled();
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.fuzs.puzzleslib_ah.config.deserialize;
+package com.fuzs.puzzleslib_ah.config.serialization;
 
 import com.fuzs.puzzleslib_ah.PuzzlesLib;
 import com.google.common.collect.Lists;

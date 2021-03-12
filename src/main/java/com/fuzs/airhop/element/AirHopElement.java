@@ -11,6 +11,7 @@ import com.fuzs.puzzleslib_ah.PuzzlesLib;
 import com.fuzs.puzzleslib_ah.capability.CapabilityController;
 import com.fuzs.puzzleslib_ah.capability.core.CapabilityDispatcher;
 import com.fuzs.puzzleslib_ah.element.AbstractElement;
+import com.fuzs.puzzleslib_ah.element.side.IClientElement;
 import com.fuzs.puzzleslib_ah.element.side.ICommonElement;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -22,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -33,23 +35,26 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ObjectHolder;
 
 @SuppressWarnings("ConstantConditions")
-public class AirHopElement extends AbstractElement implements ICommonElement {
+public class AirHopElement extends AbstractElement implements ICommonElement, IClientElement {
 
     @ObjectHolder(AirHop.MODID + ":" + "air_hop")
     public static final Enchantment AIR_HOP_ENCHANTMENT = null;
 
+    @ObjectHolder(AirHop.MODID + ":" + "entity.player.hop")
+    public static final SoundEvent ENTITY_PLAYER_HOP_SOUND = null;
+
     @CapabilityInject(IAirHopsCapability.class)
     public static final Capability<AirHopsCapability> AIR_HOPS_CAPABILITY = null;
 
-    public int maxLevel;
-    public boolean treasureEnchantment;
-    public boolean incompatibility;
+    // common config
+    public boolean summonCloud;
+    public boolean hopSound;
+    public double damageChance;
+    private boolean fallDamage;
+    // client config
     private boolean fallingOnly;
     private boolean invertElytra;
     private boolean disableOnHungry;
-    public boolean summonCloud;
-    public double damageChance;
-    private boolean fallDamage;
 
     @Override
     public String getDescription() {
@@ -61,14 +66,20 @@ public class AirHopElement extends AbstractElement implements ICommonElement {
     public void setupCommon() {
 
         PuzzlesLib.getRegistryManager().register("air_hop", new AirHopEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.FEET));
-        this.addListener(this::onPlayerTick);
+        PuzzlesLib.getRegistryManager().register("entity.player.hop", new SoundEvent(new ResourceLocation(AirHop.MODID, "entity.player.hop")));
         this.addListener(this::onEntityJoinWorld);
         this.addListener(this::onLivingFall);
         this.addListener(this::onPlayerFall);
     }
 
     @Override
-    public void loadCommon() {
+    public void setupClient() {
+
+        this.addListener(this::onPlayerTick);
+    }
+
+    @Override
+    public void initCommon() {
 
         PuzzlesLib.getNetworkHandler().registerMessage(SSyncAirHopsMessage::new, LogicalSide.CLIENT);
         PuzzlesLib.getNetworkHandler().registerMessage(CAirHopMessage::new, LogicalSide.SERVER);
@@ -86,17 +97,20 @@ public class AirHopElement extends AbstractElement implements ICommonElement {
     @Override
     public void setupCommonConfig(ForgeConfigSpec.Builder builder) {
 
-        addToConfig(builder.comment("Maximum level for Air Hop with each level providing one additional air hop.").defineInRange("Enchantment Max Level", 3, 0, 255), v -> this.maxLevel = v);
-        addToConfig(builder.comment("Prevent Air Hop from occurring on enchanting tables; instead it can only be obtained from loot chests, fishing and villager trading.").define("Treasure Enchantment", true), v -> this.treasureEnchantment = v);
-        addToConfig(builder.comment("Make Air Hop incompatible with different boots enchantments such as Depth Strider and Frost Walker").define("Enchantment Incompatibility", true), v -> this.incompatibility = v);
-        addToConfig(builder.comment("Air hopping can only be used while falling to prevent gaining too much height.").define("Only When Falling", false), v -> this.fallingOnly = v);
-        addToConfig(builder.comment("Don't start gliding when wearing an elytra and when there are air hops left. Sneaking inverts this behavior.").define("Prioritise Over Elytra", false), v -> this.invertElytra = v);
         addToConfig(builder.comment("Spawn a small particle cloud at the players feet on every air hop.").define("Spawn Particle Cloud", true), v -> this.summonCloud = v);
-        addToConfig(builder.comment("Prevent air hop enchantment from working when the player has 6 or less food points.").define("Disable On Hungry", true), v -> this.disableOnHungry = v);
-        addToConfig(builder.comment("Chance the player's boots will be damaged by an air hop.").defineInRange("Boots Damage Chance", 0.35, 0.0, 1.0), v -> this.damageChance = v);
+        addToConfig(builder.comment("Play a funny sound effect whenever the player hops in mid-air.").define("Play Hop Sound", true), v -> this.hopSound = v);
+        addToConfig(builder.comment("Chance the player's boots will be damaged by an air hop.").defineInRange("Boots Damage Chance", 0.4, 0.0, 1.0), v -> this.damageChance = v);
         addToConfig(builder.comment("Take normal fall damage when hitting the ground after air hopping.").define("Inflict Fall Damage", false), v -> this.fallDamage = v);
     }
-    
+
+    @Override
+    public void setupClientConfig(ForgeConfigSpec.Builder builder) {
+
+        addToConfig(builder.comment("Air hopping can only be used while falling to prevent gaining too much height.").define("Only When Falling", false), v -> this.fallingOnly = v);
+        addToConfig(builder.comment("Don't start gliding when wearing an elytra and when there are air hops left. Sneaking inverts this behavior.").define("Prioritise Over Elytra", false), v -> this.invertElytra = v);
+        addToConfig(builder.comment("Prevent air hop enchantment from working when the player has 6 or less food points.").define("Disable On Hungry", true), v -> this.disableOnHungry = v);
+    }
+
     private void onPlayerTick(final TickEvent.PlayerTickEvent evt) {
         
         if (evt.phase == TickEvent.Phase.END) {

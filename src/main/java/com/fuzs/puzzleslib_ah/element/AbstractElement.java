@@ -6,6 +6,7 @@ import com.fuzs.puzzleslib_ah.element.registry.ElementRegistry;
 import com.fuzs.puzzleslib_ah.element.side.IClientElement;
 import com.fuzs.puzzleslib_ah.element.side.ICommonElement;
 import com.fuzs.puzzleslib_ah.element.side.IServerElement;
+import com.fuzs.puzzleslib_ah.element.side.ISidedElement;
 import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.Event;
@@ -31,7 +32,7 @@ public abstract class AbstractElement extends EventListener implements IConfigur
     /**
      * all events registered by this element
      */
-    private final List<EventStorage<? extends Event>> events = Lists.newArrayList();
+    private final List<EventStorage<? extends Event>> eventListeners = Lists.newArrayList();
     /**
      * is this element enabled (are events registered)
      * 1 and 0 for enable / disable, -1 for force disable where reloading the config doesn't have any effect
@@ -62,11 +63,6 @@ public abstract class AbstractElement extends EventListener implements IConfigur
     public final void setupGeneralConfig(ForgeConfigSpec.Builder builder) {
 
         addToConfig(builder.comment(this.getDescription()).define(this.getDisplayName(), this.getDefaultState()), this::setEnabled);
-    }
-
-    @Override
-    public void unload() {
-
     }
 
     /**
@@ -122,33 +118,13 @@ public abstract class AbstractElement extends EventListener implements IConfigur
     }
 
     /**
-     * register Forge events from internal storage and call sided load methods
-     * no need to check physical side as the setup event won't be called anyways
+     * call sided load methods and register Forge events from internal storage
+     * no need to check physical side as the setup event won't be called by Forge anyways
+     * @param evt setup event this is called from
      */
     public final void load(ModLifecycleEvent evt) {
 
-        this.loadEvents(evt);
-        if (this.isEnabled()) {
-
-            if (evt instanceof FMLCommonSetupEvent && this instanceof ICommonElement) {
-
-                ((ICommonElement) this).loadCommon();
-            } else if (evt instanceof FMLClientSetupEvent && this instanceof IClientElement) {
-
-                ((IClientElement) this).loadClient();
-            } else if (evt instanceof FMLDedicatedServerSetupEvent && this instanceof IServerElement) {
-
-                ((IServerElement) this).loadServer();
-            }
-        }
-    }
-
-    /**
-     * initial registering for events
-     * @param evt setup event this is called from
-     */
-    private void loadEvents(ModLifecycleEvent evt) {
-
+        this.initSide(evt);
         if (this instanceof ICommonElement) {
 
             if (evt instanceof FMLCommonSetupEvent) {
@@ -162,19 +138,93 @@ public abstract class AbstractElement extends EventListener implements IConfigur
     }
 
     /**
-     * update status of all stored events
-     * @param isInit is this method called during initial setup
+     * initialize sided content, this will always happen, even when the element is not loaded
+     * @param evt setup event this is called from
      */
-    private void reload(boolean isInit) {
+    private void initSide(ModLifecycleEvent evt) {
+
+        if (evt instanceof FMLCommonSetupEvent && this instanceof ICommonElement) {
+
+            ((ICommonElement) this).initCommon();
+        } else if (evt instanceof FMLClientSetupEvent && this instanceof IClientElement) {
+
+            ((IClientElement) this).initClient();
+        } else if (evt instanceof FMLDedicatedServerSetupEvent && this instanceof IServerElement) {
+
+            ((IServerElement) this).initServer();
+        }
+    }
+
+    /**
+     * update status of all reloadable components such as events and everything specified in sided load methods
+     * @param firstLoad should unregistering not happen, as nothing has been loaded yet anyways
+     */
+    private void reload(boolean firstLoad) {
 
         if (this.isEnabled() || this.isAlwaysEnabled()) {
 
-            this.getEvents().forEach(EventStorage::register);
-        } else if (!isInit) {
+            this.reloadEventListeners(true);
+            this.reloadSides(true);
+        } else if (!firstLoad) {
 
-            // nothing to unregister during initial setup
-            this.getEvents().forEach(EventStorage::unregister);
-            this.unload();
+            this.reloadEventListeners(false);
+            this.reloadSides(false);
+        }
+    }
+
+    /**
+     * update status of all stored events
+     * @param enable should events be loaded, otherwise they're unloaded
+     */
+    private void reloadEventListeners(boolean enable) {
+
+        if (enable) {
+
+            this.getEventListeners().forEach(EventStorage::register);
+        } else {
+
+            this.getEventListeners().forEach(EventStorage::unregister);
+        }
+    }
+
+    /**
+     * call proper load or unload methods depending on sided element type
+     * @param enable should element contents be loaded, otherwise they're unloaded
+     */
+    private void reloadSides(boolean enable) {
+
+        if (this instanceof ICommonElement) {
+
+            this.reloadSpecificSide((ICommonElement) this, enable, ICommonElement::loadCommon, ICommonElement::unloadCommon);
+        }
+
+        if (this instanceof IClientElement) {
+
+            this.reloadSpecificSide((IClientElement) this, enable, IClientElement::loadClient, IClientElement::unloadClient);
+        }
+
+        if (this instanceof IServerElement) {
+
+            this.reloadSpecificSide((IServerElement) this, enable, IServerElement::loadServer, IServerElement::unloadServer);
+        }
+    }
+
+    /**
+     * call proper load or unload method for given element type
+     * @param element casted element for calling methods on
+     * @param enable should element contents be loaded, otherwise they're unloaded
+     * @param load element consumer for load
+     * @param unload element consumer for unload
+     * @param <T> type of this element
+     */
+    private <T extends ISidedElement> void reloadSpecificSide(T element, boolean enable, Consumer<T> load, Consumer<T> unload) {
+
+        if (enable) {
+
+            load.accept(element);
+        } else {
+
+            unload.accept(element);
         }
     }
 
@@ -185,7 +235,7 @@ public abstract class AbstractElement extends EventListener implements IConfigur
     }
 
     /**
-     * are the events from this mod always active
+     * are contents from this mod always active
      * @return is always enabled
      */
     public boolean isAlwaysEnabled() {
@@ -248,9 +298,9 @@ public abstract class AbstractElement extends EventListener implements IConfigur
     }
 
     @Override
-    public final List<EventStorage<? extends Event>> getEvents() {
+    public final List<EventStorage<? extends Event>> getEventListeners() {
 
-        return this.events;
+        return this.eventListeners;
     }
 
 }

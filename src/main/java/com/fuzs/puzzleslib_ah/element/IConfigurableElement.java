@@ -33,9 +33,4 @@ public interface IConfigurableElement {
      */
     void setupGeneralConfig(ForgeConfigSpec.Builder builder);
 
-    /**
-     * clean-up actions to run when this element is disabled as a whole
-     */
-    void unload();
-
 }
