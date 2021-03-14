@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 //@Mod(PuzzlesLib.MODID)
 public class PuzzlesLib {
 
-    public static final String MODID = "puzzleslib";
+    public static final String MODID = "puzzleslibah";
     public static final String NAME = "Puzzles Lib";
     public static final Logger LOGGER = LogManager.getLogger(PuzzlesLib.NAME);
 

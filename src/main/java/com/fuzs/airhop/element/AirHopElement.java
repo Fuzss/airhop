@@ -18,9 +18,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ElytraItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -53,7 +50,6 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
     private boolean fallDamage;
     // client config
     private boolean fallingOnly;
-    private boolean invertElytra;
     private boolean disableOnHungry;
 
     @Override
@@ -107,7 +103,6 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
     public void setupClientConfig(ForgeConfigSpec.Builder builder) {
 
         addToConfig(builder.comment("Air hopping can only be used while falling to prevent gaining too much height.").define("Only When Falling", false), v -> this.fallingOnly = v);
-        addToConfig(builder.comment("Don't start gliding when wearing an elytra and when there are air hops left. Sneaking inverts this behavior.").define("Prioritise Over Elytra", false), v -> this.invertElytra = v);
         addToConfig(builder.comment("Prevent air hop enchantment from working when the player has 6 or less food points.").define("Disable On Hungry", true), v -> this.disableOnHungry = v);
     }
 
@@ -156,7 +151,7 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
     private boolean attemptJump(PlayerEntity player) {
 
         AirHopsCapability capability = CapabilityController.getCapability(player, AIR_HOPS_CAPABILITY).orElse(null);
-        if (capability != null && this.canJump(player) && !this.isAboutToGlide(player) && this.isSaturated(player)) {
+        if (capability != null && this.canJump(player) && this.isSaturated(player)) {
 
             if (capability.getAirHops() < EnchantmentHelper.getMaxEnchantmentLevel(AIR_HOP_ENCHANTMENT, player)) {
 
@@ -177,14 +172,6 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
         boolean isPerformingAction = player.isPassenger() || player.abilities.isFlying || player.isOnLadder();
 
         return isAirborne && !isPerformingAction && !(player.isInWater() || player.isInLava());
-    }
-
-    private boolean isAboutToGlide(PlayerEntity player) {
-
-        ItemStack chestItem = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
-        boolean fallFlyingReady = !player.isElytraFlying() && chestItem.getItem() == Items.ELYTRA && ElytraItem.isUsable(chestItem);
-
-        return fallFlyingReady && (!player.isSneaking() || this.invertElytra);
     }
 
     private boolean isSaturated(PlayerEntity player) {
