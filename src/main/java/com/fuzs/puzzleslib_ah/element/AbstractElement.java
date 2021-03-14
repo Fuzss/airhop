@@ -193,20 +193,10 @@ public abstract class AbstractElement extends EventListener implements IConfigur
      */
     private void reloadSides(boolean enable) {
 
-        if (this instanceof ICommonElement) {
-
-            this.reloadSpecificSide((ICommonElement) this, enable, ICommonElement::loadCommon, ICommonElement::unloadCommon);
-        }
-
-        if (this instanceof IClientElement) {
-
-            this.reloadSpecificSide((IClientElement) this, enable, IClientElement::loadClient, IClientElement::unloadClient);
-        }
-
-        if (this instanceof IServerElement) {
-
-            this.reloadSpecificSide((IServerElement) this, enable, IServerElement::loadServer, IServerElement::unloadServer);
-        }
+        Consumer<ICommonElement> reloadCommon = element -> this.reloadSpecificSide(element, enable, ICommonElement::loadCommon, ICommonElement::unloadCommon);
+        Consumer<IClientElement> reloadClient = element -> this.reloadSpecificSide(element, enable, IClientElement::loadClient, IClientElement::unloadClient);
+        Consumer<IServerElement> reloadServer = element -> this.reloadSpecificSide(element, enable, IServerElement::loadServer, IServerElement::unloadServer);
+        this.setupAllSides(reloadCommon, reloadClient, reloadServer);
     }
 
     /**
@@ -272,29 +262,6 @@ public abstract class AbstractElement extends EventListener implements IConfigur
 
         this.setEnabled(-1);
         PuzzlesLib.LOGGER.warn("Detected issue in {} element: {}", this.getDisplayName(), "Disabling until game restart");
-    }
-
-    /**
-     * cast an element to its class type to make unique methods accessible
-     * @param <T> return type
-     * @return <code>element</code> cast as <code>T</code>
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends AbstractElement> T getAs() {
-
-        return (T) this;
-    }
-
-    /**
-     * cast an element to its class type to make unique methods accessible
-     * @param clazz clazz type to cast to
-     * @param <T> return type
-     * @return <code>element</code> cast as <code>T</code>
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends AbstractElement> T getAs(Class<T> clazz) {
-
-        return (T) this;
     }
 
     @Override
