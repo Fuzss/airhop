@@ -34,14 +34,14 @@ public class C2SAirHopMessage implements Message {
             player.fallDistance = 0.0F;
             ((PlayerAirHopsTracker) player).addAirHop();
             // added on top of normal jumping exhaustion (which is 0.1)
-            float airHopExhaustion = 3.0F;
+            final float airHopExhaustion = 3.0F;
             player.causeFoodExhaustion(player.isSprinting() ? 0.2F * airHopExhaustion : 0.05F * airHopExhaustion);
             this.damageBoots(player);
             this.playEffects(player);
         }
 
         private void damageBoots(Player player) {
-            if (player.getRandom().nextFloat() < AirHop.CONFIG.server().damageChance) {
+            if (player.getRandom().nextDouble() < AirHop.CONFIG.server().damageChance) {
                 ItemStack stack = player.getItemBySlot(EquipmentSlot.FEET);
                 stack.hurtAndBreak(1, player, thePlayer -> thePlayer.broadcastBreakEvent(EquipmentSlot.FEET));
             }

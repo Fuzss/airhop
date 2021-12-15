@@ -1,25 +1,13 @@
 package fuzs.airhop.handler;
 
 import fuzs.airhop.AirHop;
-import fuzs.airhop.network.message.S2CSyncAirHopsMessage;
 import fuzs.airhop.world.entity.player.PlayerAirHopsTracker;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
 
 public class PlayerFallHandler {
-    public void onEntityJoinWorld(final EntityJoinWorldEvent evt) {
-        if (evt.getEntity() instanceof ServerPlayer player) {
-            int airHops = ((PlayerAirHopsTracker) player).getAirHops();
-            if (airHops > 0) {
-                AirHop.NETWORK.sendTo(new S2CSyncAirHopsMessage(airHops), player);
-            }
-        }
-    }
-
     public void onLivingFall(final LivingFallEvent evt) {
         if (evt.getEntityLiving() instanceof Player) {
             evt.setDistance(this.onGroundHit((Player) evt.getEntityLiving(), evt.getDistance()));

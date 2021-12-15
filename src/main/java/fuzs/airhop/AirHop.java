@@ -2,7 +2,6 @@ package fuzs.airhop;
 
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.handler.PlayerFallHandler;
-import fuzs.airhop.network.message.S2CSyncAirHopsMessage;
 import fuzs.airhop.network.message.client.C2SAirHopMessage;
 import fuzs.airhop.registry.ModRegistry;
 import fuzs.puzzleslib.config.AbstractConfig;
@@ -32,19 +31,17 @@ public class AirHop {
     public static void onConstructMod(final FMLConstructModEvent evt) {
         ((ConfigHolderImpl<?, ?>) CONFIG).addConfigs(MOD_ID);
         ModRegistry.touch();
-        registerHandlers();
         registerMessages();
+        registerHandlers();
     }
 
     private static void registerHandlers() {
         final PlayerFallHandler handler = new PlayerFallHandler();
-        MinecraftForge.EVENT_BUS.addListener(handler::onEntityJoinWorld);
         MinecraftForge.EVENT_BUS.addListener(handler::onLivingFall);
         MinecraftForge.EVENT_BUS.addListener(handler::onPlayerFall);
     }
 
     private static void registerMessages() {
-        NETWORK.register(S2CSyncAirHopsMessage.class, S2CSyncAirHopsMessage::new, MessageDirection.TO_CLIENT);
-        NETWORK.register(C2SAirHopMessage.class, C2SAirHopMessage::new, MessageDirection.TO_CLIENT);
+        NETWORK.register(C2SAirHopMessage.class, C2SAirHopMessage::new, MessageDirection.TO_SERVER);
     }
 }
