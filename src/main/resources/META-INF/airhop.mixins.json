@@ -1,11 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_8",
-  "package": "com.fuzs.airhop.mixin",
-  "refmap": "airhop.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "package": "fuzs.airhop.mixin",
+  "refmap": "META-INF/airhop.refmap.json",
   "mixins": [
-    "accessor.ILivingEntityAccessor"
+    "PlayerMixin",
+    "accessor.LivingEntityAccessor"
   ],
   "client": [
   ],
