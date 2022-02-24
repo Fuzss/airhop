@@ -1,8 +1,8 @@
-package fuzs.airhop.network.message.client;
+package fuzs.airhop.network.client.message;
 
 import fuzs.airhop.AirHop;
 import fuzs.airhop.registry.ModRegistry;
-import fuzs.airhop.world.entity.player.PlayerAirHopsTracker;
+import fuzs.airhop.capability.AirHopsCapability;
 import fuzs.puzzleslib.network.message.Message;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
@@ -32,7 +32,7 @@ public class C2SAirHopMessage implements Message {
         public void handle(C2SAirHopMessage packet, Player player, Object gameInstance) {
             player.jumpFromGround();
             player.fallDistance = 0.0F;
-            ((PlayerAirHopsTracker) player).addAirHop();
+            player.getCapability(ModRegistry.AIR_HOPS_CAPABILITY).ifPresent(AirHopsCapability::addAirHop);
             // added on top of normal jumping exhaustion (which is 0.1)
             final float airHopExhaustion = 3.0F;
             player.causeFoodExhaustion(player.isSprinting() ? 0.2F * airHopExhaustion : 0.05F * airHopExhaustion);

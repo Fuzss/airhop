@@ -5,7 +5,6 @@
   "package": "fuzs.airhop.mixin",
   "refmap": "META-INF/airhop.refmap.json",
   "mixins": [
-    "PlayerMixin",
     "accessor.LivingEntityAccessor"
   ],
   "client": [

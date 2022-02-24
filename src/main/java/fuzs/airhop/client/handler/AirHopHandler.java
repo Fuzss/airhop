@@ -3,14 +3,17 @@ package fuzs.airhop.client.handler;
 import fuzs.airhop.AirHop;
 import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.mixin.accessor.LivingEntityAccessor;
-import fuzs.airhop.network.message.client.C2SAirHopMessage;
+import fuzs.airhop.network.client.message.C2SAirHopMessage;
 import fuzs.airhop.registry.ModRegistry;
-import fuzs.airhop.world.entity.player.PlayerAirHopsTracker;
+import fuzs.airhop.capability.AirHopsCapability;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class AirHopHandler {
+    @SubscribeEvent
     public void onPlayerTick(final TickEvent.PlayerTickEvent evt) {
         if (evt.phase != TickEvent.Phase.END) return;
         final Player player = evt.player;
@@ -24,11 +27,15 @@ public class AirHopHandler {
 
     private boolean attemptJump(Player player) {
         if (this.canJump(player) && this.isSaturated(player)) {
-            if (((PlayerAirHopsTracker) player).getAirHops() < EnchantmentHelper.getEnchantmentLevel(ModRegistry.AIR_HOP_ENCHANTMENT.get(), player)) {
-                player.jumpFromGround();
-                player.fallDistance = 0.0F;
-                ((PlayerAirHopsTracker) player).addAirHop();
-                return true;
+            LazyOptional<AirHopsCapability> optional = player.getCapability(ModRegistry.AIR_HOPS_CAPABILITY);
+            if (optional.isPresent()) {
+                final AirHopsCapability capability = optional.orElseThrow(IllegalStateException::new);
+                if (capability.getAirHops() < EnchantmentHelper.getEnchantmentLevel(ModRegistry.AIR_HOP_ENCHANTMENT.get(), player)) {
+                    player.jumpFromGround();
+                    player.fallDistance = 0.0F;
+                    capability.addAirHop();
+                    return true;
+                }
             }
         }
         return false;

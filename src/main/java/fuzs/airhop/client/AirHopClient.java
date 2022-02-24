@@ -16,7 +16,7 @@ public class AirHopClient {
     }
 
     private static void registerHandlers() {
-        final AirHopHandler handler = new AirHopHandler();
-        MinecraftForge.EVENT_BUS.addListener(handler::onPlayerTick);
+        final AirHopHandler airHopHandler = new AirHopHandler();
+        MinecraftForge.EVENT_BUS.addListener(airHopHandler::onPlayerTick);
     }
 }

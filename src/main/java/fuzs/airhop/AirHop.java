@@ -2,7 +2,9 @@ package fuzs.airhop;
 
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.handler.PlayerFallHandler;
-import fuzs.airhop.network.message.client.C2SAirHopMessage;
+import fuzs.airhop.handler.PlayerSyncHandler;
+import fuzs.airhop.network.client.message.C2SAirHopMessage;
+import fuzs.airhop.network.message.S2CSyncAirHopsMessage;
 import fuzs.airhop.registry.ModRegistry;
 import fuzs.puzzleslib.config.AbstractConfig;
 import fuzs.puzzleslib.config.ConfigHolder;
@@ -36,12 +38,15 @@ public class AirHop {
     }
 
     private static void registerHandlers() {
-        final PlayerFallHandler handler = new PlayerFallHandler();
-        MinecraftForge.EVENT_BUS.addListener(handler::onLivingFall);
-        MinecraftForge.EVENT_BUS.addListener(handler::onPlayerFall);
+        final PlayerFallHandler playerFallHandler = new PlayerFallHandler();
+        MinecraftForge.EVENT_BUS.addListener(playerFallHandler::onLivingFall);
+        MinecraftForge.EVENT_BUS.addListener(playerFallHandler::onPlayerFall);
+        final PlayerSyncHandler playerSyncHandler = new PlayerSyncHandler();
+        MinecraftForge.EVENT_BUS.addListener(playerSyncHandler::onEntityJoinWorld);
     }
 
     private static void registerMessages() {
+        NETWORK.register(S2CSyncAirHopsMessage.class, S2CSyncAirHopsMessage::new, MessageDirection.TO_CLIENT);
         NETWORK.register(C2SAirHopMessage.class, C2SAirHopMessage::new, MessageDirection.TO_SERVER);
     }
 }

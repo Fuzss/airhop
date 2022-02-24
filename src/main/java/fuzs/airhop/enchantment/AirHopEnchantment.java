@@ -36,7 +36,6 @@ public class AirHopEnchantment extends Enchantment {
         return true;
     }
 
-    @SuppressWarnings({"ConstantConditions", "NullableProblems"})
     @Override
     protected boolean checkCompatibility(Enchantment ench) {
         if (ench instanceof WaterWalkerEnchantment || ench instanceof FrostWalkerEnchantment) {
