@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class AirHopHandler {
     @SubscribeEvent
-    public void onPlayerTick(final TickEvent.PlayerTickEvent evt) {
+    public void onPlayerTick$end(final TickEvent.PlayerTickEvent evt) {
         if (evt.phase != TickEvent.Phase.END) return;
         final Player player = evt.player;
         if (((LivingEntityAccessor) player).getJumping() && ((LivingEntityAccessor) player).getNoJumpDelay() == 0 && this.attemptJump(player)) {

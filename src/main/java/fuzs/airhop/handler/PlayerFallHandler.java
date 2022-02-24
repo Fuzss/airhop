@@ -8,12 +8,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class PlayerFallHandler {
     @SubscribeEvent
-    public void onPlayerTick(final TickEvent.PlayerTickEvent evt) {
+    public void onPlayerTick$start(final TickEvent.PlayerTickEvent evt) {
         // start is important, otherwise this runs before fall distance is processed
         if (evt.phase != TickEvent.Phase.START) return;
         if (evt.player.isOnGround() && evt.player.getDeltaMovement().y() <= 0.0) {
@@ -23,16 +22,10 @@ public class PlayerFallHandler {
 
     @SubscribeEvent
     public void onLivingFall(final LivingFallEvent evt) {
-        if (evt.getEntityLiving() instanceof Player) {
-            // survival mode
-            evt.setDistance(this.onGroundHit((Player) evt.getEntityLiving(), evt.getDistance()));
+        // fires for survival mode only, but this is fine since there is no fall damage in creative mode
+        if (evt.getEntityLiving() instanceof Player player) {
+            evt.setDistance(this.onGroundHit(player, evt.getDistance()));
         }
-    }
-
-    @SubscribeEvent
-    public void onPlayerFall(final PlayerFlyableFallEvent evt) {
-        // creative mode
-        evt.setDistance(this.onGroundHit(evt.getPlayer(), evt.getDistance()));
     }
 
     private float onGroundHit(Player player, float fallDistance) {

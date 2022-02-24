@@ -39,9 +39,8 @@ public class AirHop {
 
     private static void registerHandlers() {
         final PlayerFallHandler playerFallHandler = new PlayerFallHandler();
-        MinecraftForge.EVENT_BUS.addListener(playerFallHandler::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(playerFallHandler::onPlayerTick$start);
         MinecraftForge.EVENT_BUS.addListener(playerFallHandler::onLivingFall);
-        MinecraftForge.EVENT_BUS.addListener(playerFallHandler::onPlayerFall);
         final PlayerSyncHandler playerSyncHandler = new PlayerSyncHandler();
         MinecraftForge.EVENT_BUS.addListener(playerSyncHandler::onEntityJoinWorld);
     }
