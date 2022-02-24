@@ -32,7 +32,7 @@ public class AirHopHandler {
                 final AirHopsCapability capability = optional.orElseThrow(IllegalStateException::new);
                 if (capability.getAirHops() < EnchantmentHelper.getEnchantmentLevel(ModRegistry.AIR_HOP_ENCHANTMENT.get(), player)) {
                     player.jumpFromGround();
-                    player.fallDistance = 0.0F;
+                    player.resetFallDistance();
                     capability.addAirHop();
                     return true;
                 }
