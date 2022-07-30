@@ -5,7 +5,7 @@ import fuzs.puzzleslib.network.message.Message;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 
-public class S2CSyncAirHopsMessage implements Message {
+public class S2CSyncAirHopsMessage implements Message<S2CSyncAirHopsMessage> {
     private int airHops;
 
     public S2CSyncAirHopsMessage() {
@@ -27,7 +27,7 @@ public class S2CSyncAirHopsMessage implements Message {
     }
 
     @Override
-    public SyncAirHopsHandler makeHandler() {
+    public PacketHandler<S2CSyncAirHopsMessage> makeHandler() {
         return new SyncAirHopsHandler();
     }
 

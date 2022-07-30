@@ -1,9 +1,9 @@
 package fuzs.airhop.config;
 
-import fuzs.puzzleslib.config.AbstractConfig;
+import fuzs.puzzleslib.config.ConfigCore;
 import fuzs.puzzleslib.config.annotation.Config;
 
-public class ServerConfig extends AbstractConfig {
+public class ServerConfig implements ConfigCore {
     @Config(name = "spawn_particle_cloud", description = "Spawn a small particle cloud at the players feet on every air hop.")
     public boolean summonCloud = true;
     @Config(name = "play_hopping_sound", description = "Play a funny sound effect whenever the player hops in mid-air.")

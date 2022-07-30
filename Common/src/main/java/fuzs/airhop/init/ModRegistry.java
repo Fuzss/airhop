@@ -6,15 +6,15 @@ import fuzs.airhop.enchantment.AirHopEnchantment;
 import fuzs.puzzleslib.capability.CapabilityController;
 import fuzs.puzzleslib.capability.data.CapabilityKey;
 import fuzs.puzzleslib.core.CoreServices;
-import fuzs.puzzleslib.registry.RegistryManager;
-import fuzs.puzzleslib.registry.RegistryReference;
+import fuzs.puzzleslib.init.RegistryManager;
+import fuzs.puzzleslib.init.RegistryReference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class ModRegistry {
-    private static final RegistryManager REGISTRY = CoreServices.FACTORIES.registry(AirHop.MOD_ID);
+    private static final RegistryManager REGISTRY = CoreServices.FACTORIES.registration(AirHop.MOD_ID);
     public static final RegistryReference<Enchantment> AIR_HOP_ENCHANTMENT = REGISTRY.registerEnchantment("air_hop", () -> new AirHopEnchantment(Enchantment.Rarity.RARE, EquipmentSlot.LEGS));
     public static final RegistryReference<SoundEvent> ENTITY_PLAYER_HOP_SOUND = REGISTRY.registerRawSoundEvent("entity.player.hop");
 

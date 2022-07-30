@@ -2,6 +2,7 @@ package fuzs.airhop.client.handler;
 
 import fuzs.airhop.AirHop;
 import fuzs.airhop.capability.AirHopsCapability;
+import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.airhop.mixin.accessor.LivingEntityAccessor;
@@ -40,7 +41,7 @@ public class AirHopHandler {
 
     private boolean canJump(Player player) {
         if (!player.isOnGround()) {
-            if (!AirHop.CONFIG.server().fallingOnly || PlayerFallHandler.getJumpHeight(player) / 2.0F < player.fallDistance) {
+            if (!AirHop.CONFIG.get(ServerConfig.class).fallingOnly || PlayerFallHandler.getJumpHeight(player) / 2.0F < player.fallDistance) {
                 if (!(player.isPassenger() || player.getAbilities().flying || player.onClimbable())) {
                     return !(player.isInWater() || player.isInLava());
                 }
@@ -51,6 +52,6 @@ public class AirHopHandler {
 
     private boolean isSaturated(Player player) {
         // air hopping always works in creative mode
-        return player.getAbilities().mayfly || !AirHop.CONFIG.server().disableOnHungry || player.getFoodData().getFoodLevel() > 6;
+        return player.getAbilities().mayfly || !AirHop.CONFIG.get(ServerConfig.class).disableOnHungry || player.getFoodData().getFoodLevel() > 6;
     }
 }

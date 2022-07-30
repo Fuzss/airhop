@@ -2,6 +2,7 @@ package fuzs.airhop.handler;
 
 import fuzs.airhop.AirHop;
 import fuzs.airhop.capability.AirHopsCapability;
+import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.init.ModRegistry;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +30,7 @@ public class PlayerFallHandler {
         Optional<AirHopsCapability> optional = ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player);
         if (optional.isPresent()) {
             int airHops = optional.get().getAirHops();
-            if (!AirHop.CONFIG.server().fallDamage && airHops > 0) {
+            if (!AirHop.CONFIG.get(ServerConfig.class).fallDamage && airHops > 0) {
                 return Math.max(0.0F, fallDistance - airHops * getJumpHeight(player));
             }
         }

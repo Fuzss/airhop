@@ -1,6 +1,7 @@
 package fuzs.airhop.enchantment;
 
 import fuzs.airhop.AirHop;
+import fuzs.airhop.config.ServerConfig;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -29,19 +30,11 @@ public class AirHopEnchantment extends Enchantment {
     @Override
     public int getMaxLevel() {
         // used to be a problem with creative inventory enchanted books, but seems to work fine now (book max levels are reflected in the inventory, not even a game reload required)
-        return AirHop.CONFIG.server().maxEnchantmentLevel;
+        return AirHop.CONFIG.get(ServerConfig.class).maxEnchantmentLevel;
     }
 
     @Override
     public boolean isTreasureOnly() {
-        return AirHop.CONFIG.server().treasureEnchantment;
-    }
-
-    @Override
-    protected boolean checkCompatibility(Enchantment ench) {
-        if (ench instanceof WaterWalkerEnchantment || ench instanceof FrostWalkerEnchantment) {
-            return false;
-        }
-        return super.checkCompatibility(ench);
+        return AirHop.CONFIG.get(ServerConfig.class).treasureEnchantment;
     }
 }

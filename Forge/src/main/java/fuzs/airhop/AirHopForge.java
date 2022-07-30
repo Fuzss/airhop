@@ -3,6 +3,7 @@ package fuzs.airhop;
 import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.handler.PlayerSyncHandler;
 import fuzs.airhop.init.ForgeModRegistry;
+import fuzs.puzzleslib.core.CoreServices;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -18,7 +19,7 @@ public class AirHopForge {
 
     @SubscribeEvent
     public static void onConstructMod(final FMLConstructModEvent evt) {
-        AirHop.onConstructMod();
+        CoreServices.FACTORIES.modConstructor(AirHop.MOD_ID).accept(new AirHop());
         ForgeModRegistry.touch();
         registerHandlers();
     }

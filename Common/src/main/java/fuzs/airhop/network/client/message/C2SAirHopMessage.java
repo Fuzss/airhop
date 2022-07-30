@@ -1,6 +1,7 @@
 package fuzs.airhop.network.client.message;
 
 import fuzs.airhop.AirHop;
+import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.airhop.capability.AirHopsCapability;
 import fuzs.puzzleslib.network.message.Message;
@@ -11,7 +12,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class C2SAirHopMessage implements Message {
+public class C2SAirHopMessage implements Message<C2SAirHopMessage> {
 
     @Override
     public void write(FriendlyByteBuf buf) {
@@ -24,7 +25,7 @@ public class C2SAirHopMessage implements Message {
     }
 
     @Override
-    public AirHopHandler makeHandler() {
+    public PacketHandler<C2SAirHopMessage> makeHandler() {
         return new AirHopHandler();
     }
 
@@ -43,17 +44,17 @@ public class C2SAirHopMessage implements Message {
         }
 
         private void damageBoots(Player player) {
-            if (player.getRandom().nextDouble() < AirHop.CONFIG.server().damageChance) {
+            if (player.getRandom().nextDouble() < AirHop.CONFIG.get(ServerConfig.class).damageChance) {
                 ItemStack stack = player.getItemBySlot(EquipmentSlot.LEGS);
                 stack.hurtAndBreak(1, player, thePlayer -> thePlayer.broadcastBreakEvent(EquipmentSlot.LEGS));
             }
         }
 
         private void playEffects(Player player) {
-            if (AirHop.CONFIG.server().summonCloud) {
+            if (AirHop.CONFIG.get(ServerConfig.class).summonCloud) {
                 ((ServerPlayer) player).getLevel().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY(), player.getZ(), 15, 0.25F, 0.0F, 0.25F, 0.01F);
             }
-            if (AirHop.CONFIG.server().hopSound) {
+            if (AirHop.CONFIG.get(ServerConfig.class).hopSound) {
                 player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModRegistry.ENTITY_PLAYER_HOP_SOUND.get(), player.getSoundSource(), 1.0F, 0.6F + player.level.getRandom().nextFloat() * 0.8F);
             }
         }
