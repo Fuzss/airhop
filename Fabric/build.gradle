@@ -54,6 +54,10 @@ dependencies {
 
     // Puzzles Lib
     modImplementation "fuzs.puzzleslib:puzzleslib-fabric:${puzzlesVersion}"
+
+    // Additional libraries (included with our jar)
+    modImplementation(include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.1"))
+    modImplementation(include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.1"))
 }
 
 loom {

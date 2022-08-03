@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog].
 
+## [v4.1.1-1.19.1] - 2022-08-03
+- Cardinal Components is included in the jar again on Fabric
+
 ## [v4.1.0-1.19.1] - 2022-07-30
 - Compiled for Minecraft 1.19.1
 - Updated to Puzzles Lib v4.1.0
