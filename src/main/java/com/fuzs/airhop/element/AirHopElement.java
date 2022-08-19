@@ -61,7 +61,7 @@ public class AirHopElement extends AbstractElement implements ICommonElement, IC
     @Override
     public void setupCommon() {
 
-        PuzzlesLib.getRegistryManager().register("air_hop", new AirHopEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.FEET));
+        PuzzlesLib.getRegistryManager().register("air_hop", new AirHopEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET));
         PuzzlesLib.getRegistryManager().register("entity.player.hop", new SoundEvent(new ResourceLocation(AirHop.MODID, "entity.player.hop")));
         this.addListener(this::onEntityJoinWorld);
         this.addListener(this::onLivingFall);

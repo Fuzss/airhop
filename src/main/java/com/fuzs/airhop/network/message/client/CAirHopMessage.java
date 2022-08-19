@@ -6,12 +6,15 @@ import com.fuzs.airhop.element.AirHopElement;
 import com.fuzs.puzzleslib_ah.capability.CapabilityController;
 import com.fuzs.puzzleslib_ah.element.registry.ElementRegistry;
 import com.fuzs.puzzleslib_ah.network.message.Message;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
+
+import java.util.Map;
 
 public class CAirHopMessage extends Message {
 
@@ -54,8 +57,10 @@ public class CAirHopMessage extends Message {
 
             if (player.getRNG().nextDouble() < damageChance) {
 
-                ItemStack itemstack = player.getItemStackFromSlot(EquipmentSlotType.FEET);
-                itemstack.damageItem(1, player, player1 -> player1.sendBreakAnimation(EquipmentSlotType.FEET));
+                Map.Entry<EquipmentSlotType, ItemStack> entry = EnchantmentHelper.getRandomItemWithEnchantment(AirHopElement.AIR_HOP_ENCHANTMENT, player);
+                if (entry != null) {
+                    entry.getValue().damageItem(1, player, player1 -> player1.sendBreakAnimation(entry.getKey()));
+                }
             }
         }
 
