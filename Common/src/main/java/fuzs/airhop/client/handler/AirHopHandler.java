@@ -7,10 +7,17 @@ import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.airhop.mixin.accessor.LivingEntityAccessor;
 import fuzs.airhop.network.client.message.C2SAirHopMessage;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public class AirHopHandler {
 
@@ -28,7 +35,7 @@ public class AirHopHandler {
             Optional<AirHopsCapability> optional = ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player);
             if (optional.isPresent()) {
                 final AirHopsCapability capability = optional.get();
-                if (capability.getAirHops() < EnchantmentHelper.getEnchantmentLevel(ModRegistry.AIR_HOP_ENCHANTMENT.get(), player)) {
+                if (capability.getAirHops() < getAllEnchantmentLevels(player.getArmorSlots(), ModRegistry.AIR_HOP_ENCHANTMENT.get())) {
                     player.jumpFromGround();
                     player.resetFallDistance();
                     capability.addAirHop();
@@ -53,5 +60,33 @@ public class AirHopHandler {
     private boolean isSaturated(Player player) {
         // air hopping always works in creative mode
         return player.getAbilities().mayfly || !AirHop.CONFIG.get(ServerConfig.class).disableOnHungry || player.getFoodData().getFoodLevel() > 6;
+    }
+
+    private static int getAllEnchantmentLevels(Iterable<ItemStack> armorItems, Enchantment enchantment) {
+        MutableInt mutableint = new MutableInt();
+        runIterationOnInventory((enchantment1, level) -> {
+            if (enchantment1 == enchantment) {
+                mutableint.add(level);
+            }
+        }, armorItems);
+        return mutableint.intValue();
+    }
+
+    private static void runIterationOnItem(BiConsumer<Enchantment, Integer> enchantmentVisitor, ItemStack itemStack) {
+        if (!itemStack.isEmpty()) {
+            ListTag listTag = itemStack.getEnchantmentTags();
+            for (int i = 0; i < listTag.size(); ++i) {
+                CompoundTag compoundTag = listTag.getCompound(i);
+                Registry.ENCHANTMENT
+                        .getOptional(EnchantmentHelper.getEnchantmentId(compoundTag))
+                        .ifPresent(enchantment -> enchantmentVisitor.accept(enchantment, EnchantmentHelper.getEnchantmentLevel(compoundTag)));
+            }
+        }
+    }
+
+    private static void runIterationOnInventory(BiConsumer<Enchantment, Integer> enchantmentVisitor, Iterable<ItemStack> iterable) {
+        for (ItemStack itemStack : iterable) {
+            runIterationOnItem(enchantmentVisitor, itemStack);
+        }
     }
 }

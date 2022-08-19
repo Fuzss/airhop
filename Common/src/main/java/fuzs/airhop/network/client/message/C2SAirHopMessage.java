@@ -11,6 +11,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+
+import java.util.Map;
 
 public class C2SAirHopMessage implements Message<C2SAirHopMessage> {
 
@@ -45,8 +48,10 @@ public class C2SAirHopMessage implements Message<C2SAirHopMessage> {
 
         private void damageBoots(Player player) {
             if (player.getRandom().nextDouble() < AirHop.CONFIG.get(ServerConfig.class).damageChance) {
-                ItemStack stack = player.getItemBySlot(EquipmentSlot.LEGS);
-                stack.hurtAndBreak(1, player, thePlayer -> thePlayer.broadcastBreakEvent(EquipmentSlot.LEGS));
+                Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(ModRegistry.AIR_HOP_ENCHANTMENT.get(), player);
+                if (entry != null) {
+                    entry.getValue().hurtAndBreak(1, player, thePlayer -> thePlayer.broadcastBreakEvent(entry.getKey()));
+                }
             }
         }
 

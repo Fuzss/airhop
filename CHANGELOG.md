@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog].
 
+## [v4.1.2-1.19.1] - 2022-08-19
+### Changed
+- Internal adjustments so the enchantment is no longer hardcoded for leggings, allows support for Universal Enchants mod
+
 ## [v4.1.1-1.19.1] - 2022-08-03
 - Cardinal Components is included in the jar again on Fabric
 
