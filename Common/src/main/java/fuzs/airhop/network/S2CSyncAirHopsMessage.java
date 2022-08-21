@@ -1,7 +1,7 @@
-package fuzs.airhop.network.message;
+package fuzs.airhop.network;
 
 import fuzs.airhop.init.ModRegistry;
-import fuzs.puzzleslib.network.message.Message;
+import fuzs.puzzleslib.network.Message;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 
@@ -27,15 +27,13 @@ public class S2CSyncAirHopsMessage implements Message<S2CSyncAirHopsMessage> {
     }
 
     @Override
-    public PacketHandler<S2CSyncAirHopsMessage> makeHandler() {
-        return new SyncAirHopsHandler();
-    }
+    public MessageHandler<S2CSyncAirHopsMessage> makeHandler() {
+        return new MessageHandler<>() {
 
-    private static class SyncAirHopsHandler extends PacketHandler<S2CSyncAirHopsMessage> {
-
-        @Override
-        public void handle(S2CSyncAirHopsMessage packet, Player player, Object gameInstance) {
-            ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player).ifPresent(capability -> capability.setAirHops(packet.airHops));
-        }
+            @Override
+            public void handle(S2CSyncAirHopsMessage packet, Player player, Object gameInstance) {
+                ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player).ifPresent(capability -> capability.setAirHops(packet.airHops));
+            }
+        };
     }
 }

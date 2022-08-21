@@ -2,7 +2,7 @@ package fuzs.airhop.handler;
 
 import fuzs.airhop.AirHop;
 import fuzs.airhop.init.ModRegistry;
-import fuzs.airhop.network.message.S2CSyncAirHopsMessage;
+import fuzs.airhop.network.S2CSyncAirHopsMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;

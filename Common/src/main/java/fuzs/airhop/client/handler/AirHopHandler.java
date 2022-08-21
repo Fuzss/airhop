@@ -6,7 +6,7 @@ import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.airhop.mixin.accessor.LivingEntityAccessor;
-import fuzs.airhop.network.client.message.C2SAirHopMessage;
+import fuzs.airhop.network.client.C2SAirHopMessage;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

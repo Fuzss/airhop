@@ -1,12 +1,14 @@
 package fuzs.airhop;
 
+import fuzs.airhop.capability.AirHopsCapability;
 import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.handler.PlayerSyncHandler;
-import fuzs.airhop.init.ForgeModRegistry;
+import fuzs.airhop.init.ModRegistry;
+import fuzs.puzzleslib.capability.ForgeCapabilityController;
 import fuzs.puzzleslib.core.CoreServices;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,8 +22,12 @@ public class AirHopForge {
     @SubscribeEvent
     public static void onConstructMod(final FMLConstructModEvent evt) {
         CoreServices.FACTORIES.modConstructor(AirHop.MOD_ID).accept(new AirHop());
-        ForgeModRegistry.touch();
+        registerCapabilities();
         registerHandlers();
+    }
+
+    private static void registerCapabilities() {
+        ForgeCapabilityController.setCapabilityToken(ModRegistry.AIR_HOPS_CAPABILITY, new CapabilityToken<AirHopsCapability>() {});
     }
 
     private static void registerHandlers() {

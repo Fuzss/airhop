@@ -2,8 +2,8 @@ package fuzs.airhop;
 
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.init.ModRegistry;
-import fuzs.airhop.network.client.message.C2SAirHopMessage;
-import fuzs.airhop.network.message.S2CSyncAirHopsMessage;
+import fuzs.airhop.network.client.C2SAirHopMessage;
+import fuzs.airhop.network.S2CSyncAirHopsMessage;
 import fuzs.puzzleslib.config.ConfigHolder;
 import fuzs.puzzleslib.core.CoreServices;
 import fuzs.puzzleslib.core.ModConstructor;
