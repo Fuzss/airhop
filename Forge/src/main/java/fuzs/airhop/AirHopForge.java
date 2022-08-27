@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
@@ -41,8 +42,14 @@ public class AirHopForge {
             evt.setDistance(playerFallHandler.onLivingFall(evt.getEntity(), evt.getDistance(), evt.getDamageMultiplier()));
         });
         final PlayerSyncHandler playerSyncHandler = new PlayerSyncHandler();
+        MinecraftForge.EVENT_BUS.addListener((final PlayerEvent.PlayerLoggedInEvent evt) -> {
+            playerSyncHandler.onEntityJoinLevel(evt.getEntity(), evt.getEntity().getLevel());
+        });
         MinecraftForge.EVENT_BUS.addListener((final EntityJoinLevelEvent evt) -> {
-            playerSyncHandler.onEntityJoinWorld(evt.getEntity(), evt.getLevel());
+            playerSyncHandler.onEntityJoinLevel(evt.getEntity(), evt.getLevel());
+        });
+        MinecraftForge.EVENT_BUS.addListener((final PlayerEvent.PlayerChangedDimensionEvent evt) -> {
+            playerSyncHandler.onEntityJoinLevel(evt.getEntity(), evt.getEntity().level);
         });
     }
 }

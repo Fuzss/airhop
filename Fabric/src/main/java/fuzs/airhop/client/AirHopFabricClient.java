@@ -13,6 +13,6 @@ public class AirHopFabricClient implements ClientModInitializer {
 
     private static void registerHandlers() {
         final AirHopHandler airHopHandler = new AirHopHandler();
-        PlayerTickEvents.END_TICK.register(airHopHandler::onPlayerTick$end);
+        PlayerTickEvents.START_TICK.register(airHopHandler::onPlayerTick);
     }
 }

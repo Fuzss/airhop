@@ -17,11 +17,11 @@ public class AirHopsCapabilityImpl implements AirHopsCapability {
 
     @Override
     public void write(CompoundTag tag) {
-        tag.putByte("AirHops", (byte) this.getAirHops());
+        tag.putByte("AirHops", (byte) this.airHops);
     }
 
     @Override
     public void read(CompoundTag tag) {
-        this.setAirHops(tag.getByte("AirHops"));
+        this.airHops = tag.getByte("AirHops");
     }
 }
