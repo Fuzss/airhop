@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public class AirHopsCapabilityImpl implements AirHopsCapability {
     private int airHops;
+    private boolean dirty;
 
     @Override
     public int getAirHops() {
@@ -13,6 +14,22 @@ public class AirHopsCapabilityImpl implements AirHopsCapability {
     @Override
     public void setAirHops(int amount) {
         this.airHops = amount;
+        this.markDirty();
+    }
+
+    @Override
+    public boolean isDirty() {
+        return this.dirty;
+    }
+
+    @Override
+    public void markDirty() {
+        this.dirty = true;
+    }
+
+    @Override
+    public void markClean() {
+        this.dirty = false;
     }
 
     @Override

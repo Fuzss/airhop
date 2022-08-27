@@ -5,9 +5,8 @@ import fuzs.airhop.capability.AirHopsCapability;
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.init.ModRegistry;
-import fuzs.airhop.mixin.accessor.LivingEntityAccessor;
+import fuzs.airhop.mixin.client.accessor.LivingEntityAccessor;
 import fuzs.airhop.network.client.C2SAirHopMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,9 +21,11 @@ import java.util.function.BiConsumer;
 
 public class AirHopHandler {
 
-    public void onPlayerTick(Player player) {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.options.keyJump.isDown() && !((LivingEntityAccessor) player).getJumping() && ((LivingEntityAccessor) player).getNoJumpDelay() == 0 && this.attemptJump(player)) {
+    public void onPlayerTick$end(Player player) {
+        if (player.getAbilities().flying) {
+            // don't use an air hop immediately after stopping creative mode flight
+            ((LivingEntityAccessor) player).setNoJumpDelay(10);
+        } else if (((LivingEntityAccessor) player).getJumping() && ((LivingEntityAccessor) player).getNoJumpDelay() == 0 && this.attemptJump(player)) {
             // prevent accidental usage of air hops
             ((LivingEntityAccessor) player).setNoJumpDelay(10);
             // trigger jump on server

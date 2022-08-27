@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog].
 
+## [v4.2.1-1.19.2] - 2022-08-27
+### Changed
+- Moved capability syncing to Puzzles Lib
+### Fixed
+- An air hop is no longer triggered after stopping creative mode flight
+
 ## [v4.2.0-1.19.2] - 2022-08-21
 - Compiled for Minecraft 1.19.2
 

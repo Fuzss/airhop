@@ -3,7 +3,6 @@ package fuzs.airhop;
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.airhop.network.client.C2SAirHopMessage;
-import fuzs.airhop.network.S2CSyncAirHopsMessage;
 import fuzs.puzzleslib.config.ConfigHolder;
 import fuzs.puzzleslib.core.CoreServices;
 import fuzs.puzzleslib.core.ModConstructor;
@@ -29,7 +28,6 @@ public class AirHop implements ModConstructor {
     }
 
     private static void registerMessages() {
-        NETWORK.register(S2CSyncAirHopsMessage.class, S2CSyncAirHopsMessage::new, MessageDirection.TO_CLIENT);
         NETWORK.register(C2SAirHopMessage.class, C2SAirHopMessage::new, MessageDirection.TO_SERVER);
     }
 }

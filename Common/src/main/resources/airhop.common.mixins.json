@@ -5,9 +5,9 @@
   "package": "fuzs.airhop.mixin",
   "refmap": "airhop.refmap.json",
   "mixins": [
-    "accessor.LivingEntityAccessor"
   ],
   "client": [
+    "client.accessor.LivingEntityAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

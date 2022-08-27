@@ -7,6 +7,7 @@ import fuzs.airhop.enchantment.AirHopEnchantment;
 import fuzs.puzzleslib.capability.CapabilityController;
 import fuzs.puzzleslib.capability.data.CapabilityKey;
 import fuzs.puzzleslib.capability.data.PlayerRespawnStrategy;
+import fuzs.puzzleslib.capability.data.SyncStrategy;
 import fuzs.puzzleslib.core.CoreServices;
 import fuzs.puzzleslib.init.RegistryManager;
 import fuzs.puzzleslib.init.RegistryReference;
@@ -21,7 +22,7 @@ public class ModRegistry {
     public static final RegistryReference<SoundEvent> ENTITY_PLAYER_HOP_SOUND = REGISTRY.registerRawSoundEvent("entity.player.hop");
 
     private static final CapabilityController CAPABILITIES = CoreServices.FACTORIES.capabilities(AirHop.MOD_ID);
-    public static final CapabilityKey<AirHopsCapability> AIR_HOPS_CAPABILITY = CAPABILITIES.registerPlayerCapability("air_hops", AirHopsCapability.class, player -> new AirHopsCapabilityImpl(), PlayerRespawnStrategy.NEVER);
+    public static final CapabilityKey<AirHopsCapability> AIR_HOPS_CAPABILITY = CAPABILITIES.registerPlayerCapability("air_hops", AirHopsCapability.class, player -> new AirHopsCapabilityImpl(), PlayerRespawnStrategy.NEVER, SyncStrategy.SELF);
 
     public static void touch() {
 

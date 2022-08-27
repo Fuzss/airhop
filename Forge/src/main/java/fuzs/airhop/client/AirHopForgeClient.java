@@ -20,8 +20,7 @@ public class AirHopForgeClient {
     private static void registerHandlers() {
         final AirHopHandler airHopHandler = new AirHopHandler();
         MinecraftForge.EVENT_BUS.addListener((final TickEvent.PlayerTickEvent evt) -> {
-            if (evt.phase != TickEvent.Phase.START) return;
-            airHopHandler.onPlayerTick(evt.player);
+            if (evt.phase == TickEvent.Phase.END) airHopHandler.onPlayerTick$end(evt.player);
         });
     }
 }

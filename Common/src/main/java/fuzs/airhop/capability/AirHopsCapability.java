@@ -1,9 +1,9 @@
 package fuzs.airhop.capability;
 
-import fuzs.puzzleslib.capability.data.CapabilityComponent;
-import net.minecraft.nbt.CompoundTag;
+import fuzs.puzzleslib.capability.data.SyncedCapabilityComponent;
 
-public interface AirHopsCapability extends CapabilityComponent {
+public interface AirHopsCapability extends SyncedCapabilityComponent {
+
     int getAirHops();
 
     void setAirHops(int amount);
@@ -18,11 +18,5 @@ public interface AirHopsCapability extends CapabilityComponent {
 
     default boolean hasUsedAirHops() {
         return this.getAirHops() > 0;
-    }
-
-    default CompoundTag toCompoundTag() {
-        CompoundTag tag = new CompoundTag();
-        this.write(tag);
-        return tag;
     }
 }
