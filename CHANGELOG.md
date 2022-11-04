@@ -3,28 +3,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog].
 
-## [v4.2.1-1.19.2] - 2022-08-27
-### Changed
-- Moved capability syncing to Puzzles Lib
+## [v3.3.0-1.19.2] - 2022-11-04
+- Backported from 1.19
+
+## [v3.2.0-1.18.2] - 2022-03-03
+- Compiled for Minecraft 1.18.2
+
+## [v3.1.1-1.18.1] - 2022-02-24
+### Added
+- Added italian and russian translations
 ### Fixed
-- An air hop is no longer triggered after stopping creative mode flight
+- Fixed air hops not resetting when slow falling
 
-## [v4.2.0-1.19.2] - 2022-08-21
-- Compiled for Minecraft 1.19.2
-
-## [v4.1.2-1.19.1] - 2022-08-19
+## [v3.1.0-1.18.1] - 2022-02-24
 ### Changed
-- Internal adjustments so the enchantment is no longer hardcoded for leggings, allows support for Universal Enchants mod
+- Switched back to capability system instead of mixins for mod better compatibility and in preparation of Fabric port
 
-## [v4.1.1-1.19.1] - 2022-08-03
-- Cardinal Components is included in the jar again on Fabric
-
-## [v4.1.0-1.19.1] - 2022-07-30
-- Compiled for Minecraft 1.19.1
-- Updated to Puzzles Lib v4.1.0
-
-## [v4.0.0-1.19] - 2022-07-14
-- Ported to Minecraft 1.19
-- Split into multi-loader project
+## [v3.0.0-1.18.1] - 2021-12-15
+- Ported to Minecraft 1.18
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/

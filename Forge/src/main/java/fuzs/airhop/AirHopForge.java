@@ -36,7 +36,7 @@ public class AirHopForge {
             playerFallHandler.onPlayerTick$start(evt.player);
         });
         MinecraftForge.EVENT_BUS.addListener((final LivingFallEvent evt) -> {
-            evt.setDistance(playerFallHandler.onLivingFall(evt.getEntity(), evt.getDistance(), evt.getDamageMultiplier()));
+            evt.setDistance(playerFallHandler.onLivingFall(evt.getEntityLiving(), evt.getDistance(), evt.getDamageMultiplier()));
         });
     }
 }
