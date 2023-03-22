@@ -1,7 +1,7 @@
 package fuzs.airhop.config;
 
-import fuzs.puzzleslib.config.ConfigCore;
-import fuzs.puzzleslib.config.annotation.Config;
+import fuzs.puzzleslib.api.config.v3.Config;
+import fuzs.puzzleslib.api.config.v3.ConfigCore;
 
 public class ServerConfig implements ConfigCore {
     @Config(name = "spawn_particle_cloud", description = "Spawn a small particle cloud at the players feet on every air hop.")

@@ -1,18 +1,13 @@
 package fuzs.airhop.client;
 
-import fuzs.airhop.api.event.PlayerTickEvents;
-import fuzs.airhop.client.handler.AirHopHandler;
+import fuzs.airhop.AirHop;
+import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
 import net.fabricmc.api.ClientModInitializer;
 
 public class AirHopFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        registerHandlers();
-    }
-
-    private static void registerHandlers() {
-        final AirHopHandler airHopHandler = new AirHopHandler();
-        PlayerTickEvents.END_TICK.register(airHopHandler::onPlayerTick$end);
+        ClientModConstructor.construct(AirHop.MOD_ID, AirHopClient::new);
     }
 }

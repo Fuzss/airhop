@@ -1,6 +1,6 @@
 package fuzs.airhop.mixin;
 
-import fuzs.airhop.api.event.PlayerTickEvents;
+import fuzs.airhop.api.event.v1.FabricEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -11,19 +11,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity {
+abstract class PlayerFabricMixin extends LivingEntity {
 
-    protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
+    protected PlayerFabricMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    public void tick$head(CallbackInfo callbackInfo) {
-        PlayerTickEvents.START_TICK.invoker().onStartTick((Player) (Object) this);
+    public void tick$0(CallbackInfo callback) {
+        FabricEvents.PLAYER_TICK_START.invoker().onStartTick(Player.class.cast(this));
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    public void tick$tail(CallbackInfo callbackInfo) {
-        PlayerTickEvents.END_TICK.invoker().onEndTick((Player) (Object) this);
+    public void tick$1(CallbackInfo callback) {
+        FabricEvents.PLAYER_TICK_END.invoker().onEndTick(Player.class.cast(this));
     }
 }

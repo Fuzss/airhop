@@ -3,7 +3,7 @@ package fuzs.airhop.network.client;
 import fuzs.airhop.AirHop;
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.init.ModRegistry;
-import fuzs.puzzleslib.network.Message;
+import fuzs.puzzleslib.api.network.v2.MessageV2;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.Map;
 
-public class C2SAirHopMessage implements Message<C2SAirHopMessage> {
+public class C2SAirHopMessage implements MessageV2<C2SAirHopMessage> {
 
     @Override
     public void write(FriendlyByteBuf buf) {

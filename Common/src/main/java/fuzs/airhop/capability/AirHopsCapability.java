@@ -1,6 +1,6 @@
 package fuzs.airhop.capability;
 
-import fuzs.puzzleslib.capability.data.SyncedCapabilityComponent;
+import fuzs.puzzleslib.api.capability.v2.data.SyncedCapabilityComponent;
 
 public interface AirHopsCapability extends SyncedCapabilityComponent {
 

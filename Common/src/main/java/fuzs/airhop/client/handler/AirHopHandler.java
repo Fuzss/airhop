@@ -7,7 +7,7 @@ import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.airhop.mixin.client.accessor.LivingEntityAccessor;
 import fuzs.airhop.network.client.C2SAirHopMessage;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
@@ -21,11 +21,11 @@ import java.util.function.BiConsumer;
 
 public class AirHopHandler {
 
-    public void onPlayerTick$end(Player player) {
+    public static void onPlayerTick$End(Player player) {
         if (player.getAbilities().flying) {
             // don't use an air hop immediately after stopping creative mode flight
             ((LivingEntityAccessor) player).setNoJumpDelay(10);
-        } else if (((LivingEntityAccessor) player).getJumping() && ((LivingEntityAccessor) player).getNoJumpDelay() == 0 && this.attemptJump(player)) {
+        } else if (((LivingEntityAccessor) player).getJumping() && ((LivingEntityAccessor) player).getNoJumpDelay() == 0 && attemptJump(player)) {
             // prevent accidental usage of air hops
             ((LivingEntityAccessor) player).setNoJumpDelay(10);
             // trigger jump on server
@@ -33,8 +33,8 @@ public class AirHopHandler {
         }
     }
 
-    private boolean attemptJump(Player player) {
-        if (this.canJump(player) && this.isSaturated(player)) {
+    private static boolean attemptJump(Player player) {
+        if (canJump(player) && isSaturated(player)) {
             Optional<AirHopsCapability> optional = ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player);
             if (optional.isPresent()) {
                 final AirHopsCapability capability = optional.get();
@@ -49,7 +49,7 @@ public class AirHopHandler {
         return false;
     }
 
-    private boolean canJump(Player player) {
+    private static boolean canJump(Player player) {
         if (!player.isOnGround()) {
             if (!AirHop.CONFIG.get(ServerConfig.class).fallingOnly || PlayerFallHandler.getJumpHeight(player) / 2.0F < player.fallDistance) {
                 if (!(player.isPassenger() || player.getAbilities().flying || player.onClimbable())) {
@@ -60,7 +60,7 @@ public class AirHopHandler {
         return false;
     }
 
-    private boolean isSaturated(Player player) {
+    private static boolean isSaturated(Player player) {
         // air hopping always works in creative mode
         return player.getAbilities().mayfly || !AirHop.CONFIG.get(ServerConfig.class).disableOnHungry || player.getFoodData().getFoodLevel() > 6;
     }
@@ -80,8 +80,7 @@ public class AirHopHandler {
             ListTag listTag = itemStack.getEnchantmentTags();
             for (int i = 0; i < listTag.size(); ++i) {
                 CompoundTag compoundTag = listTag.getCompound(i);
-                Registry.ENCHANTMENT
-                        .getOptional(EnchantmentHelper.getEnchantmentId(compoundTag))
+                BuiltInRegistries.ENCHANTMENT.getOptional(EnchantmentHelper.getEnchantmentId(compoundTag))
                         .ifPresent(enchantment -> enchantmentVisitor.accept(enchantment, EnchantmentHelper.getEnchantmentLevel(compoundTag)));
             }
         }

@@ -1,12 +1,10 @@
-package fuzs.airhop.enchantment;
+package fuzs.airhop.world.item.enchantment;
 
 import fuzs.airhop.AirHop;
 import fuzs.airhop.config.ServerConfig;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.FrostWalkerEnchantment;
-import net.minecraft.world.item.enchantment.WaterWalkerEnchantment;
 
 /**
  * values based on frost walker enchantment

@@ -1,40 +1,27 @@
 package fuzs.airhop.handler;
 
 import fuzs.airhop.AirHop;
-import fuzs.airhop.capability.AirHopsCapability;
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.init.ModRegistry;
+import fuzs.puzzleslib.api.event.v1.core.EventResult;
+import fuzs.puzzleslib.api.event.v1.data.MutableFloat;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-import java.util.Optional;
-
 public class PlayerFallHandler {
 
-    public void onPlayerTick$start(Player player) {
-        if (player.isOnGround() && player.getDeltaMovement().y() <= 0.0) {
-            ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player).ifPresent(AirHopsCapability::resetAirHops);
-        }
-    }
-
-    public float onLivingFall(LivingEntity entity, float distance, float damageMultiplier) {
+    public static EventResult onLivingFall(LivingEntity entity, MutableFloat fallDistance, MutableFloat damageMultiplier) {
         // fires for survival mode only, but this is fine since there is no fall damage in creative mode
         if (entity instanceof Player player) {
-            return this.onGroundHit(player, distance);
+            ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player).ifPresent(capability -> {
+                if (!AirHop.CONFIG.get(ServerConfig.class).fallDamage && capability.getAirHops() > 0) {
+                    fallDistance.mapFloat(distance -> Math.max(0.0F, distance - capability.getAirHops() * getJumpHeight(player)));
+                }
+                capability.resetAirHops();
+            });
         }
-        return distance;
-    }
-
-    private float onGroundHit(Player player, float fallDistance) {
-        Optional<AirHopsCapability> optional = ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player);
-        if (optional.isPresent()) {
-            int airHops = optional.get().getAirHops();
-            if (!AirHop.CONFIG.get(ServerConfig.class).fallDamage && airHops > 0) {
-                return Math.max(0.0F, fallDistance - airHops * getJumpHeight(player));
-            }
-        }
-        return fallDistance;
+        return EventResult.PASS;
     }
 
     public static float getJumpHeight(Player player) {
@@ -44,5 +31,4 @@ public class PlayerFallHandler {
         }
         return jumpHeight;
     }
-
 }

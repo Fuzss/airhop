@@ -1,11 +1,13 @@
 package fuzs.airhop;
 
+import fuzs.airhop.api.event.v1.PlayerTickEvents;
+import fuzs.airhop.api.event.v1.entity.living.LivingFallCallback;
 import fuzs.airhop.capability.AirHopsCapability;
-import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.init.ModRegistry;
-import fuzs.puzzleslib.capability.ForgeCapabilityController;
-import fuzs.puzzleslib.core.CoreServices;
-import net.minecraftforge.common.MinecraftForge;
+import fuzs.puzzleslib.api.capability.v2.ForgeCapabilityHelper;
+import fuzs.puzzleslib.api.core.v1.ModConstructor;
+import fuzs.puzzleslib.api.event.v1.core.ForgeEventInvokerRegistry;
+import fuzs.puzzleslib.api.event.v1.data.MutableFloat;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
@@ -19,24 +21,30 @@ public class AirHopForge {
 
     @SubscribeEvent
     public static void onConstructMod(final FMLConstructModEvent evt) {
-        CoreServices.FACTORIES.modConstructor(AirHop.MOD_ID).accept(new AirHop());
+        registerEvents();
+        ModConstructor.construct(AirHop.MOD_ID, AirHop::new);
         registerCapabilities();
-        registerHandlers();
     }
 
     private static void registerCapabilities() {
-        ForgeCapabilityController.setCapabilityToken(ModRegistry.AIR_HOPS_CAPABILITY, new CapabilityToken<AirHopsCapability>() {});
+        ForgeCapabilityHelper.setCapabilityToken(ModRegistry.AIR_HOPS_CAPABILITY, new CapabilityToken<AirHopsCapability>() {});
     }
 
-    private static void registerHandlers() {
-        final PlayerFallHandler playerFallHandler = new PlayerFallHandler();
-        MinecraftForge.EVENT_BUS.addListener((final TickEvent.PlayerTickEvent evt) -> {
-            // start is important, otherwise this runs before fall distance is processed
+    private static void registerEvents() {
+        ForgeEventInvokerRegistry.INSTANCE.register(PlayerTickEvents.Start.class, TickEvent.PlayerTickEvent.class, (PlayerTickEvents.Start callback, TickEvent.PlayerTickEvent evt) -> {
             if (evt.phase != TickEvent.Phase.START) return;
-            playerFallHandler.onPlayerTick$start(evt.player);
+            callback.onStartTick(evt.player);
         });
-        MinecraftForge.EVENT_BUS.addListener((final LivingFallEvent evt) -> {
-            evt.setDistance(playerFallHandler.onLivingFall(evt.getEntity(), evt.getDistance(), evt.getDamageMultiplier()));
+        ForgeEventInvokerRegistry.INSTANCE.register(PlayerTickEvents.End.class, TickEvent.PlayerTickEvent.class, (PlayerTickEvents.End callback, TickEvent.PlayerTickEvent evt) -> {
+            if (evt.phase != TickEvent.Phase.END) return;
+            callback.onEndTick(evt.player);
+        });
+        ForgeEventInvokerRegistry.INSTANCE.register(LivingFallCallback.class, LivingFallEvent.class, (LivingFallCallback callback, LivingFallEvent evt) -> {
+            MutableFloat fallDistance = MutableFloat.fromEvent(evt::setDistance, evt::getDistance);
+            MutableFloat damageMultiplier = MutableFloat.fromEvent(evt::setDamageMultiplier, evt::getDamageMultiplier);
+            if (callback.onLivingFall(evt.getEntity(), fallDistance, damageMultiplier).isInterrupt()) {
+                evt.setCanceled(true);
+            }
         });
     }
 }
