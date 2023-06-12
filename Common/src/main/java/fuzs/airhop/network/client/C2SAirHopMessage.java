@@ -53,10 +53,10 @@ public class C2SAirHopMessage implements MessageV2<C2SAirHopMessage> {
 
             private void playEffects(Player player) {
                 if (AirHop.CONFIG.get(ServerConfig.class).summonCloud) {
-                    ((ServerPlayer) player).getLevel().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY(), player.getZ(), 15, 0.25F, 0.0F, 0.25F, 0.01F);
+                    ((ServerPlayer) player).serverLevel().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY(), player.getZ(), 15, 0.25F, 0.0F, 0.25F, 0.01F);
                 }
                 if (AirHop.CONFIG.get(ServerConfig.class).hopSound) {
-                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModRegistry.ENTITY_PLAYER_HOP_SOUND.get(), player.getSoundSource(), 1.0F, 0.6F + player.level.getRandom().nextFloat() * 0.8F);
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModRegistry.ENTITY_PLAYER_HOP_SOUND.get(), player.getSoundSource(), 1.0F, 0.6F + player.getRandom().nextFloat() * 0.8F);
                 }
             }
         };

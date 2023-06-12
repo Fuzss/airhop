@@ -50,7 +50,7 @@ public class AirHopHandler {
     }
 
     private static boolean canJump(Player player) {
-        if (!player.isOnGround()) {
+        if (!player.onGround()) {
             if (!AirHop.CONFIG.get(ServerConfig.class).fallingOnly || PlayerFallHandler.getJumpHeight(player) / 2.0F < player.fallDistance) {
                 if (!(player.isPassenger() || player.getAbilities().flying || player.onClimbable())) {
                     return !(player.isInWater() || player.isInLava());
