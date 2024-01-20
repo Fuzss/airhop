@@ -1,9 +1,9 @@
-package fuzs.airhop;
+package fuzs.airhop.forge;
 
-import fuzs.airhop.capability.AirHopsCapability;
+import fuzs.airhop.AirHop;
 import fuzs.airhop.init.ModRegistry;
-import fuzs.puzzleslib.api.capability.v2.ForgeCapabilityHelper;
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
+import fuzs.puzzleslib.forge.api.capability.v3.ForgeCapabilityHelper;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,6 +20,8 @@ public class AirHopForge {
     }
 
     private static void registerCapabilities() {
-        ForgeCapabilityHelper.setCapabilityToken(ModRegistry.AIR_HOPS_CAPABILITY, new CapabilityToken<AirHopsCapability>() {});
+        ForgeCapabilityHelper.setCapabilityToken(ModRegistry.AIR_HOPS_CAPABILITY, new CapabilityToken<>() {
+            // NO-OP
+        });
     }
 }

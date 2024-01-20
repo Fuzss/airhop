@@ -9,7 +9,7 @@
   "authors": [
     "${modAuthor}"
   ],
-  
+
   "contact": {
     "homepage": "${modPageUrl}",
     "issues": "${modIssueUrl}",
@@ -29,12 +29,13 @@
       "${clientEntryPoint}"
     ],
     "cardinal-components": [
-      "fuzs.puzzleslib.api.capability.v2.initializer.EntityComponentInitializerImpl"
+      "fuzs.puzzleslib.fabric.api.capability.v3.initializer.EntityComponentInitializerImpl"
     ]
   },
 
   "mixins": [
-    "${modId}.common.mixins.json"
+    "${modId}.common.mixins.json",
+    "${modId}.fabric.mixins.json"
   ],
 
   "depends": {

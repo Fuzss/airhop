@@ -16,18 +16,17 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.apache.commons.lang3.mutable.MutableInt;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class AirHopHandler {
 
-    public static void onPlayerTick$End(Player player) {
+    public static void onEndPlayerTick(Player player) {
         if (player.getAbilities().flying) {
             // don't use an air hop immediately after stopping creative mode flight
-            ((LivingEntityAccessor) player).setNoJumpDelay(10);
-        } else if (((LivingEntityAccessor) player).getJumping() && ((LivingEntityAccessor) player).getNoJumpDelay() == 0 && attemptJump(player)) {
+            ((LivingEntityAccessor) player).airhop$setNoJumpDelay(10);
+        } else if (((LivingEntityAccessor) player).airhop$getJumping() && ((LivingEntityAccessor) player).airhop$getNoJumpDelay() == 0 && attemptJump(player)) {
             // prevent accidental usage of air hops
-            ((LivingEntityAccessor) player).setNoJumpDelay(10);
+            ((LivingEntityAccessor) player).airhop$setNoJumpDelay(10);
             // trigger jump on server
             AirHop.NETWORK.sendToServer(new C2SAirHopMessage());
         }
@@ -35,15 +34,12 @@ public class AirHopHandler {
 
     private static boolean attemptJump(Player player) {
         if (canJump(player) && isSaturated(player)) {
-            Optional<AirHopsCapability> optional = ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player);
-            if (optional.isPresent()) {
-                final AirHopsCapability capability = optional.get();
-                if (capability.getAirHops() < getAllEnchantmentLevels(player.getArmorSlots(), ModRegistry.AIR_HOP_ENCHANTMENT.get())) {
-                    player.jumpFromGround();
-                    player.resetFallDistance();
-                    capability.addAirHop();
-                    return true;
-                }
+            AirHopsCapability capability = ModRegistry.AIR_HOPS_CAPABILITY.get(player);
+            if (capability.getAirHops() < getAllEnchantmentLevels(player.getArmorSlots(), ModRegistry.AIR_HOP_ENCHANTMENT.value())) {
+                player.jumpFromGround();
+                player.resetFallDistance();
+                capability.addAirHop();
+                return true;
             }
         }
         return false;

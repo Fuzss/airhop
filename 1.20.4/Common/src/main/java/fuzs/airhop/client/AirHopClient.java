@@ -12,6 +12,6 @@ public class AirHopClient implements ClientModConstructor {
     }
 
     private static void registerHandlers() {
-        PlayerTickEvents.END.register(AirHopHandler::onPlayerTick$End);
+        PlayerTickEvents.END.register(AirHopHandler::onEndPlayerTick);
     }
 }

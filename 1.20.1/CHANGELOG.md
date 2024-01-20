@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog].
 
+## [v8.0.1-1.20.1] - 2024-01-20
+### Fixed
+- Fix air hops not resetting when touching the ground when the player is unable to take fall damage
+
 ## [v8.0.0-1.20.1] - 2023-06-27
 - Ported to Minecraft 1.20.1
 

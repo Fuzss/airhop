@@ -18,7 +18,7 @@ public class ServerConfig implements ConfigCore {
     @Config(name = "disable_on_hungry", description = "Prevent air hop enchantment from working when the player has 6 or less food points.")
     public boolean disableOnHungry = true;
     @Config(category = "enchantment", description = "Maximum level for this enchantment. Each level provides one additional air hop.")
-    @Config.IntRange(min = 1)
+    @Config.IntRange(min = 1, max = 255)
     public int maxEnchantmentLevel = 3;
     @Config(category = "enchantment", description = "Makes the enchantment unobtainable from enchanting tables. It is only available on items from loot chests, fishing and villager trading.")
     public boolean treasureEnchantment = true;

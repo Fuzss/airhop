@@ -18,10 +18,15 @@ public class PlayerFallHandler {
                 if (!AirHop.CONFIG.get(ServerConfig.class).fallDamage && capability.getAirHops() > 0) {
                     fallDistance.mapFloat(distance -> Math.max(0.0F, distance - capability.getAirHops() * getJumpHeight(player)));
                 }
-                capability.resetAirHops();
             });
         }
         return EventResult.PASS;
+    }
+
+    public static void onStartPlayerTick(Player player) {
+        if (player.onGround()) {
+            ModRegistry.AIR_HOPS_CAPABILITY.get(player).resetAirHops();
+        }
     }
 
     public static float getJumpHeight(Player player) {

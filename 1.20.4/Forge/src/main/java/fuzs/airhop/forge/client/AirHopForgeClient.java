@@ -1,6 +1,7 @@
-package fuzs.airhop.client;
+package fuzs.airhop.forge.client;
 
 import fuzs.airhop.AirHop;
+import fuzs.airhop.client.AirHopClient;
 import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
