@@ -25,7 +25,7 @@ public class PlayerFallHandler {
 
     public static void onStartPlayerTick(Player player) {
         if (player.onGround()) {
-            ModRegistry.AIR_HOPS_CAPABILITY.get(player).resetAirHops();
+            ModRegistry.AIR_HOPS_CAPABILITY.getIfProvided(player).ifPresent(AirHopsCapability::resetAirHops);
         }
     }
 
