@@ -1,6 +1,7 @@
 package fuzs.airhop.handler;
 
 import fuzs.airhop.AirHop;
+import fuzs.airhop.capability.AirHopsCapability;
 import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.puzzleslib.api.event.v1.core.EventResult;
@@ -25,7 +26,7 @@ public class PlayerFallHandler {
 
     public static void onStartPlayerTick(Player player) {
         if (player.onGround()) {
-            ModRegistry.AIR_HOPS_CAPABILITY.get(player).resetAirHops();
+            ModRegistry.AIR_HOPS_CAPABILITY.maybeGet(player).ifPresent(AirHopsCapability::resetAirHops);
         }
     }
 
