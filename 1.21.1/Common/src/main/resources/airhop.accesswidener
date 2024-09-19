@@ -1,0 +1,8 @@
+accessWidener   v2  named
+accessible  field   net/minecraft/world/entity/LivingEntity noJumpDelay I
+transitive-accessible   method  net/minecraft/world/item/enchantment/EnchantmentHelper  getComponentType    (Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/core/component/DataComponentType;
+transitive-accessible   method  net/minecraft/world/item/enchantment/EnchantmentHelper  runIterationOnItem  (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor;)V
+transitive-accessible   method  net/minecraft/world/item/enchantment/EnchantmentHelper  runIterationOnItem  (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor;)V
+transitive-accessible   method  net/minecraft/world/item/enchantment/EnchantmentHelper  runIterationOnEquipment (Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor;)V
+transitive-accessible   class   net/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentInSlotVisitor
+transitive-accessible   class   net/minecraft/world/item/enchantment/EnchantmentHelper$EnchantmentVisitor
