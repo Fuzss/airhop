@@ -22,9 +22,9 @@ public class ModRegistry {
     public static final Holder.Reference<SoundEvent> ENTITY_PLAYER_HOP_SOUND_EVENT = REGISTRIES.registerSoundEvent(
             "entity.player.hop");
     public static final Holder.Reference<DataComponentType<Unit>> AIR_HOP_ENCHANTMENT_EFFECT_COMPONENT_TYPE = REGISTRIES.register(
-            Registries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, "air_hop",
-            () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).build()
-    );
+            Registries.ENCHANTMENT_EFFECT_COMPONENT_TYPE,
+            "air_hop",
+            () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).build());
 
     public static final DataAttachmentType<Entity, Byte> AIR_HOPS_ATTACHMENT_TYPE = DataAttachmentRegistry.<Byte>entityBuilder()
             .defaultValue(EntityType.PLAYER, (byte) 0)
@@ -32,7 +32,7 @@ public class ModRegistry {
             .networkSynchronized(ByteBufCodecs.BYTE)
             .build(AirHop.id("air_hops"));
 
-    public static void touch() {
+    public static void bootstrap() {
         // NO-OP
     }
 }

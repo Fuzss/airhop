@@ -19,12 +19,13 @@ public class AirHop implements ModConstructor {
     public static final String MOD_NAME = "Air Hop";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
 
-    public static final NetworkHandler NETWORK = NetworkHandler.builder(MOD_ID).registerServerbound(ServerboundAirHopMessage.class);
+    public static final NetworkHandler NETWORK = NetworkHandler.builder(MOD_ID)
+            .registerServerbound(ServerboundAirHopMessage.class);
     public static final ConfigHolder CONFIG = ConfigHolder.builder(MOD_ID).server(ServerConfig.class);
 
     @Override
     public void onConstructMod() {
-        ModRegistry.touch();
+        ModRegistry.bootstrap();
         registerEventHandlers();
     }
 
