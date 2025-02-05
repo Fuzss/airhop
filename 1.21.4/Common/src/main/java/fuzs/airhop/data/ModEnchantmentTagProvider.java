@@ -16,8 +16,8 @@ public class ModEnchantmentTagProvider extends AbstractTagProvider<Enchantment> 
 
     @Override
     public void addTags(HolderLookup.Provider registries) {
-        this.add(EnchantmentTags.TREASURE).add(ModRegistry.AIR_HOP_ENCHANTMENT);
-        this.add(EnchantmentTags.ON_RANDOM_LOOT).add(ModRegistry.AIR_HOP_ENCHANTMENT);
-        this.add(EnchantmentTags.TRADEABLE).add(ModRegistry.AIR_HOP_ENCHANTMENT);
+        this.tag(EnchantmentTags.TREASURE).add(ModRegistry.AIR_HOP_ENCHANTMENT);
+        this.tag(EnchantmentTags.ON_RANDOM_LOOT).add(ModRegistry.AIR_HOP_ENCHANTMENT);
+        this.tag(EnchantmentTags.TRADEABLE).add(ModRegistry.AIR_HOP_ENCHANTMENT);
     }
 }
