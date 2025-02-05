@@ -1,0 +1,15 @@
+{
+  "entity.player.hop": {
+    "sounds": [
+      {
+        "name": "airhop:entity/player/hop1",
+        "volume": 0.2
+      },
+      {
+        "name": "airhop:entity/player/hop2",
+        "volume": 0.2
+      }
+    ],
+    "subtitle": "subtitles.entity.player.hop"
+  }
+}
