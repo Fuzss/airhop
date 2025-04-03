@@ -5,6 +5,7 @@ import fuzs.airhop.config.ServerConfig;
 import fuzs.airhop.handler.PlayerFallHandler;
 import fuzs.airhop.init.ModRegistry;
 import fuzs.airhop.network.client.ServerboundAirHopMessage;
+import fuzs.puzzleslib.api.network.v4.MessageSender;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,15 +26,14 @@ public class AirHopClientHandler {
             // prevent accidental usage of air hops
             player.noJumpDelay = 10;
             // trigger jump on server
-            AirHop.NETWORK.sendToServer(new ServerboundAirHopMessage());
+            MessageSender.broadcast(new ServerboundAirHopMessage());
         }
     }
 
     private static boolean attemptJump(Player player) {
         if (canJump(player) && isSaturated(player)) {
-            if (ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.getOrDefault(player, (byte) 0) < getHighestLevel(player,
-                    ModRegistry.AIR_HOP_ENCHANTMENT_EFFECT_COMPONENT_TYPE.value()
-            )) {
+            if (ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.getOrDefault(player, (byte) 0) <
+                    getHighestLevel(player, ModRegistry.AIR_HOP_ENCHANTMENT_EFFECT_COMPONENT_TYPE.value())) {
                 player.jumpFromGround();
                 player.resetFallDistance();
                 ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.update(player, airHops -> ++airHops);
@@ -45,8 +45,8 @@ public class AirHopClientHandler {
 
     private static boolean canJump(Player player) {
         if (!player.onGround()) {
-            if (!AirHop.CONFIG.get(ServerConfig.class).fallingOnly || PlayerFallHandler.getJumpHeight(player) / 2.0F <
-                    player.fallDistance) {
+            if (!AirHop.CONFIG.get(ServerConfig.class).fallingOnly ||
+                    PlayerFallHandler.getJumpHeight(player) / 2.0F < player.fallDistance) {
                 if (!(player.isPassenger() || player.getAbilities().flying || player.onClimbable())) {
                     return !(player.isInWater() || player.isInLava());
                 }
@@ -76,8 +76,7 @@ public class AirHopClientHandler {
                             mutableInt.setValue(enchantmentLevel);
                         }
                     }
-                }
-        );
+                });
         return mutableInt.getValue();
     }
 }
