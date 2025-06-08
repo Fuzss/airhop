@@ -1,8 +1,8 @@
 package fuzs.airhop.neoforge;
 
 import fuzs.airhop.AirHop;
-import fuzs.airhop.data.ModDatapackRegistriesProvider;
 import fuzs.airhop.data.ModEnchantmentTagProvider;
+import fuzs.airhop.init.ModRegistry;
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import net.neoforged.fml.common.Mod;
@@ -12,8 +12,8 @@ public class AirHopNeoForge {
 
     public AirHopNeoForge() {
         ModConstructor.construct(AirHop.MOD_ID, AirHop::new);
-        DataProviderHelper.registerDataProviders(AirHop.MOD_ID, ModDatapackRegistriesProvider::new,
-                ModEnchantmentTagProvider::new
-        );
+        DataProviderHelper.registerDataProviders(AirHop.MOD_ID,
+                ModRegistry.REGISTRY_SET_BUILDER,
+                ModEnchantmentTagProvider::new);
     }
 }
