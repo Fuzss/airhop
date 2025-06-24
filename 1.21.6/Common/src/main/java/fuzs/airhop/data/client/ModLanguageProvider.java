@@ -12,8 +12,8 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
 
     @Override
     public void addTranslations(TranslationBuilder builder) {
-        builder.addEnchantment(ModRegistry.AIR_HOP_ENCHANTMENT, "Air Hop");
-        builder.addEnchantment(ModRegistry.AIR_HOP_ENCHANTMENT, "desc", "Enables jumping in mid-air.");
+        builder.add(ModRegistry.AIR_HOP_ENCHANTMENT, "Air Hop");
+        builder.add(ModRegistry.AIR_HOP_ENCHANTMENT, "desc", "Enables jumping in mid-air.");
         builder.add(ModRegistry.ENTITY_PLAYER_HOP_SOUND_EVENT.value(), "Player hops");
     }
 }
