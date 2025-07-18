@@ -6,6 +6,7 @@ import fuzs.puzzleslib.api.attachment.v4.DataAttachmentRegistry;
 import fuzs.puzzleslib.api.attachment.v4.DataAttachmentType;
 import fuzs.puzzleslib.api.data.v2.AbstractDatapackRegistriesProvider;
 import fuzs.puzzleslib.api.init.v3.registry.RegistryManager;
+import fuzs.puzzleslib.api.network.v4.PlayerSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistrySetBuilder;
@@ -38,7 +39,7 @@ public class ModRegistry {
     public static final DataAttachmentType<Entity, Byte> AIR_HOPS_ATTACHMENT_TYPE = DataAttachmentRegistry.<Byte>entityBuilder()
             .defaultValue(EntityType.PLAYER, (byte) 0)
             .persistent(Codec.BYTE)
-            .networkSynchronized(ByteBufCodecs.BYTE)
+            .networkSynchronized(ByteBufCodecs.BYTE, PlayerSet::ofEntity)
             .build(AirHop.id("air_hops"));
 
     public static void bootstrap() {
