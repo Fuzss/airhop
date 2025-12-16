@@ -28,9 +28,9 @@ public record ServerboundAirHopMessage() implements ServerboundPlayMessage {
                 ServerPlayer serverPlayer = context.player();
                 serverPlayer.jumpFromGround();
                 serverPlayer.fallDistance = 0.0F;
-                ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.update(serverPlayer, airHops -> ++airHops);
+                ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.apply(serverPlayer, (Byte airHops) -> ++airHops);
                 // added on top of normal jumping exhaustion (which is 0.1)
-                final float airHopExhaustion = 3.0F;
+                float airHopExhaustion = 3.0F;
                 serverPlayer.causeFoodExhaustion(
                         serverPlayer.isSprinting() ? 0.2F * airHopExhaustion : 0.05F * airHopExhaustion);
                 this.damageBoots(context.level(), serverPlayer);
@@ -63,6 +63,7 @@ public record ServerboundAirHopMessage() implements ServerboundPlayMessage {
                             0.25F,
                             0.01F);
                 }
+
                 if (AirHop.CONFIG.get(ServerConfig.class).hopSound) {
                     serverLevel.playSound(null,
                             serverPlayer.getX(),

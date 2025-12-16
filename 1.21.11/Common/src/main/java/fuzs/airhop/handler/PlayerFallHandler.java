@@ -17,9 +17,11 @@ public class PlayerFallHandler {
         if (entity instanceof Player player) {
             byte airHops = ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.getOrDefault(player, (byte) 0);
             if (!AirHop.CONFIG.get(ServerConfig.class).fallDamage && airHops > 0) {
-                fallDistance.mapDouble((double distance) -> Math.max(0.0, distance - airHops * getJumpHeight(player)));
+                fallDistance.mapAsDouble((double distance) -> Math.max(0.0,
+                        distance - airHops * getJumpHeight(player)));
             }
         }
+
         return EventResult.PASS;
     }
 
@@ -34,6 +36,7 @@ public class PlayerFallHandler {
         if (player.hasEffect(MobEffects.JUMP_BOOST)) {
             jumpHeight += 0.6875F * (player.getEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1.0F);
         }
+
         return jumpHeight;
     }
 }

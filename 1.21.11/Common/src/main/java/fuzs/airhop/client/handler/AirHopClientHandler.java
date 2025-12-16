@@ -32,33 +32,35 @@ public class AirHopClientHandler {
 
     private static boolean attemptJump(Player player) {
         if (canJump(player) && isSaturated(player)) {
-            if (ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.getOrDefault(player, (byte) 0) <
-                    getHighestLevel(player, ModRegistry.AIR_HOP_ENCHANTMENT_EFFECT_COMPONENT_TYPE.value())) {
+            if (ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.getOrDefault(player, (byte) 0) < getHighestLevel(player,
+                    ModRegistry.AIR_HOP_ENCHANTMENT_EFFECT_COMPONENT_TYPE.value())) {
                 player.jumpFromGround();
                 player.resetFallDistance();
-                ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.update(player, airHops -> ++airHops);
+                ModRegistry.AIR_HOPS_ATTACHMENT_TYPE.apply(player, (Byte airHops) -> ++airHops);
                 return true;
             }
         }
+
         return false;
     }
 
     private static boolean canJump(Player player) {
         if (!player.onGround()) {
-            if (!AirHop.CONFIG.get(ServerConfig.class).fallingOnly ||
-                    PlayerFallHandler.getJumpHeight(player) / 2.0F < player.fallDistance) {
+            if (!AirHop.CONFIG.get(ServerConfig.class).fallingOnly
+                    || PlayerFallHandler.getJumpHeight(player) / 2.0F < player.fallDistance) {
                 if (!(player.isPassenger() || player.getAbilities().flying || player.onClimbable())) {
                     return !(player.isInWater() || player.isInLava());
                 }
             }
         }
+
         return false;
     }
 
     private static boolean isSaturated(Player player) {
         // air hopping always works in creative mode
-        return player.getAbilities().mayfly || !AirHop.CONFIG.get(ServerConfig.class).disableOnHungry ||
-                player.getFoodData().getFoodLevel() > 6;
+        return player.getAbilities().mayfly || !AirHop.CONFIG.get(ServerConfig.class).disableOnHungry
+                || player.getFoodData().getFoodLevel() > 6;
     }
 
     /**

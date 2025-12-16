@@ -1,0 +1,61 @@
+{
+    "mod": {
+        "id": "airhop",
+        "group": "fuzs.airhop",
+        "name": "Air Hop",
+        "version": "21.11.0",
+        "authors": [
+            "Fuzs"
+        ],
+        "description": "A new enchantment for jumping while in midair. Not once, not twice, but three times!",
+        "license": "MPL-2.0"
+    },
+    "dependencies": [
+        {
+            "name": "fabricapi",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "forgeconfigapiport",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "puzzleslib",
+            "type": "required",
+            "platforms": [
+                "fabric",
+                "neoforge"
+            ]
+        }
+    ],
+    "links": [
+        {
+            "name": "github",
+            "slug": "airhop"
+        },
+        {
+            "name": "curseforge",
+            "slug": "air-hop",
+            "id": "323071"
+        },
+        {
+            "name": "modrinth",
+            "slug": "air-hop",
+            "id": "g1eaCZgs"
+        }
+    ],
+    "environments": {
+        "client": "required",
+        "server": "required"
+    },
+    "platforms": [
+        "fabric",
+        "neoforge"
+    ]
+}
